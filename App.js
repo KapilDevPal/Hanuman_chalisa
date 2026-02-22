@@ -1,20 +1,24 @@
+import 'react-native-gesture-handler';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { LanguageProvider } from './src/context/LanguageContext';
+import { UserProvider } from './src/context/UserContext';
+import AppNavigator from './src/navigation/AppNavigator';
+import { scheduleDailyReminder } from './src/utils/notifications';
 
 export default function App() {
+
+  useEffect(() => {
+    // Schedule daily reminder on app mount
+    scheduleDailyReminder();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <LanguageProvider>
+      <UserProvider>
+        <StatusBar style="auto" />
+        <AppNavigator />
+      </UserProvider>
+    </LanguageProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,0 +1,29 @@
+{
+    "steps": [
+        {
+            "id": 1,
+            "title": "Purification",
+            "description": "Bathe and wear clean clothes."
+        },
+        {
+            "id": 2,
+            "title": "Asana (Seating)",
+            "description": "Sit on a red cloth facing East or North."
+        },
+        {
+            "id": 3,
+            "title": "Invoking Rama",
+            "description": "Meditate on Lord Rama and Sita."
+        },
+        {
+            "id": 4,
+            "title": "Chanting",
+            "description": "Recite the Hanuman Chalisa with full devotion."
+        },
+        {
+            "id": 5,
+            "title": "Aarti",
+            "description": "Conclude with the Aarti of Lord Hanuman."
+        }
+    ]
+}

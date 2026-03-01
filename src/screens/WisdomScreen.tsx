@@ -1,21 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Share } from 'react-native';
+import { View, Text, TouchableOpacity, Share } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import { useLanguage } from '../context/LanguageContext';
 import { Colors } from '../constants/Colors';
 import { Card } from '../components/Card';
 
-// Import JSONs
 import hindiWisdom from '../../assets/data/hi/wisdom.json';
 import englishWisdom from '../../assets/data/en/wisdom.json';
 import punjabiWisdom from '../../assets/data/pa/wisdom.json';
 
-const wisdomMap = {
-    hi: hindiWisdom,
-    en: englishWisdom,
-    pa: punjabiWisdom,
-};
+const wisdomMap = { hi: hindiWisdom, en: englishWisdom, pa: punjabiWisdom };
 
 export const WisdomScreen = () => {
     const { language } = useLanguage();
@@ -23,7 +18,6 @@ export const WisdomScreen = () => {
     const [todaysQuote, setTodaysQuote] = useState<{ id: number, text: string } | null>(null);
 
     useEffect(() => {
-        // Select quote based on day so it stays same for the day
         const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
         const quotes = wisdomMap[language] || wisdomMap['hi'];
         const index = dayOfYear % quotes.length;
@@ -38,9 +32,7 @@ export const WisdomScreen = () => {
                 if (await Sharing.isAvailableAsync()) {
                     await Sharing.shareAsync(uri);
                 } else {
-                    Share.share({
-                        message: todaysQuote?.text || "Jai Shri Ram",
-                    });
+                    Share.share({ message: todaysQuote?.text || "Jai Shri Ram" });
                 }
             }
         } catch (error) {
@@ -51,66 +43,23 @@ export const WisdomScreen = () => {
     if (!todaysQuote) return null;
 
     return (
-        <View style={styles.container}>
+        <View className="flex-1 bg-background p-5 justify-center items-center">
             <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }} style={{ backgroundColor: Colors.background }}>
-                <Card style={styles.quoteCard}>
-                    <Text style={styles.quoteIcon}>❝</Text>
-                    <Text style={styles.quoteText}>{todaysQuote.text}</Text>
-                    <Text style={styles.quoteFooter}>- Hanuman Chalisa App</Text>
+                <Card className="p-8 items-center bg-white shadow-xl m-3 border border-border/50">
+                    <Text className="text-[80px] text-accent opacity-20 -mb-6">❝</Text>
+                    <Text className="text-2xl font-bold text-text text-center leading-loose my-6">
+                        {todaysQuote.text}
+                    </Text>
+                    <Text className="text-sm text-lightText mt-4 font-medium italic">- Hanuman Chalisa App</Text>
                 </Card>
             </ViewShot>
 
-            <TouchableOpacity style={styles.shareBtn} onPress={shareQuote}>
-                <Text style={styles.shareText}>Share Wisdom</Text>
+            <TouchableOpacity
+                className="mt-10 bg-primary py-4 px-10 rounded-full shadow-md"
+                onPress={shareQuote}
+            >
+                <Text className="text-white font-bold text-lg">Share Wisdom</Text>
             </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.background,
-        padding: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    quoteCard: {
-        padding: 30,
-        alignItems: 'center',
-        backgroundColor: Colors.white, // Ensure white bg for screenshot
-        margin: 10,
-    },
-    quoteIcon: {
-        fontSize: 60,
-        color: Colors.accent,
-        opacity: 0.2,
-        marginBottom: -20,
-    },
-    quoteText: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: Colors.text,
-        textAlign: 'center',
-        lineHeight: 32,
-        marginVertical: 20,
-    },
-    quoteFooter: {
-        fontSize: 14,
-        color: Colors.lightText,
-        marginTop: 20,
-    },
-    shareBtn: {
-        marginTop: 40,
-        backgroundColor: Colors.primary,
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        elevation: 5,
-    },
-    shareText: {
-        color: Colors.white,
-        fontWeight: 'bold',
-        fontSize: 18,
-    }
-});

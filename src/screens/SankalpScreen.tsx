@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useUser } from '../context/UserContext';
 import { Colors } from '../constants/Colors';
 import { Card } from '../components/Card';
@@ -31,16 +31,16 @@ export const SankalpScreen = () => {
 
     if (!sankalp.active) {
         return (
-            <View style={styles.container}>
-                <Text style={styles.header}>New Sankalp (Pledge)</Text>
-                <Text style={styles.subHeader}>Choose a duration for your discipline.</Text>
+            <View className="flex-1 bg-background p-5 items-center justify-center">
+                <Text className="text-3xl font-bold text-primary mb-2 text-center">New Sankalp</Text>
+                <Text className="text-base text-text mb-8 text-center px-4">Choose a duration for your discipline.</Text>
 
-                <View style={styles.choices}>
+                <View className="flex-row gap-4">
                     {[11, 21, 40].map(days => (
                         <TouchableOpacity key={days} onPress={() => handleStart(days)}>
-                            <Card style={styles.choiceCard}>
-                                <Text style={styles.daysText}>{days}</Text>
-                                <Text style={styles.daysLabel}>Days</Text>
+                            <Card className="w-[100px] h-[120px] justify-center items-center bg-white shadow-sm border border-border">
+                                <Text className="text-4xl font-bold text-accent mb-1">{days}</Text>
+                                <Text className="text-base text-text">Days</Text>
                             </Card>
                         </TouchableOpacity>
                     ))}
@@ -50,121 +50,39 @@ export const SankalpScreen = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Your Sankalp Progress</Text>
+        <View className="flex-1 bg-background p-5 items-center pt-10">
+            <Text className="text-2xl font-bold text-primary mb-2">Your Sankalp Progress</Text>
 
-            <View style={styles.progressContainer}>
-                <View style={styles.circle}>
-                    <Text style={styles.progressText}>{sankalp.daysCompleted}</Text>
-                    <Text style={styles.totalText}>/ {sankalp.duration}</Text>
+            <View className="my-10">
+                <View className="w-48 h-48 rounded-full border-[8px] border-primary justify-center items-center bg-white shadow-lg">
+                    <Text className="text-6xl font-extrabold text-primary">{sankalp.daysCompleted}</Text>
+                    <Text className="text-2xl text-lightText -mt-2">/ {sankalp.duration}</Text>
                 </View>
             </View>
 
-            <Text style={styles.statusText}>
+            <Text className="text-xl text-text font-semibold mb-8 text-center px-4">
                 {sankalp.daysCompleted === sankalp.duration
                     ? "Sankalp Completed! Jai Hanuman!"
                     : "Keep going! You are doing great."}
             </Text>
 
             {sankalp.daysCompleted < sankalp.duration && (
-                <TouchableOpacity style={styles.actionBtn} onPress={handleMarkComplete}>
-                    <Text style={styles.actionBtnText}>Mark Today Complete</Text>
+                <TouchableOpacity
+                    className="bg-primary py-4 px-10 rounded-full mb-6 shadow-md"
+                    onPress={handleMarkComplete}
+                >
+                    <Text className="text-white text-lg font-bold">Mark Today Complete</Text>
                 </TouchableOpacity>
             )}
 
-            <TouchableOpacity style={styles.resetBtn} onPress={() => {
-                Alert.alert('Reset Sankalp', 'Are you sure?', [{ text: 'Cancel' }, { text: 'Reset', onPress: resetSankalp }])
-            }}>
-                <Text style={styles.resetText}>Abandon / Reset Sankalp</Text>
+            <TouchableOpacity
+                className="p-3 mt-4"
+                onPress={() => {
+                    Alert.alert('Reset Sankalp', 'Are you sure?', [{ text: 'Cancel' }, { text: 'Reset', onPress: resetSankalp }])
+                }}
+            >
+                <Text className="text-accent underline font-medium">Abandon / Reset Sankalp</Text>
             </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.background,
-        padding: 20,
-        alignItems: 'center',
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: Colors.primary,
-        marginBottom: 10,
-        marginTop: 20,
-    },
-    subHeader: {
-        fontSize: 16,
-        color: Colors.text,
-        marginBottom: 30,
-        textAlign: 'center',
-    },
-    choices: {
-        flexDirection: 'row',
-        gap: 15,
-    },
-    choiceCard: {
-        width: 100,
-        height: 120,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Colors.white,
-    },
-    daysText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: Colors.accent,
-    },
-    daysLabel: {
-        fontSize: 16,
-        color: Colors.text,
-    },
-    progressContainer: {
-        marginVertical: 40,
-    },
-    circle: {
-        width: 180,
-        height: 180,
-        borderRadius: 90,
-        borderWidth: 8,
-        borderColor: Colors.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Colors.white,
-    },
-    progressText: {
-        fontSize: 48,
-        fontWeight: 'bold',
-        color: Colors.primary,
-    },
-    totalText: {
-        fontSize: 24,
-        color: Colors.lightText,
-    },
-    statusText: {
-        fontSize: 18,
-        color: Colors.text,
-        marginBottom: 30,
-        fontWeight: '600',
-    },
-    actionBtn: {
-        backgroundColor: Colors.primary,
-        paddingVertical: 15,
-        paddingHorizontal: 40,
-        borderRadius: 30,
-        marginBottom: 20,
-    },
-    actionBtnText: {
-        color: Colors.white,
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    resetBtn: {
-        padding: 10,
-    },
-    resetText: {
-        color: Colors.accent,
-    }
-});

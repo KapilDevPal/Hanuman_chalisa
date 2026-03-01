@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useLanguage } from '../context/LanguageContext';
 import { Colors } from '../constants/Colors';
 import { Card } from '../components/Card';
 
-// Import JSONs
 import hindiGuide from '../../assets/data/hi/prayer_guide.json';
 import englishGuide from '../../assets/data/en/prayer_guide.json';
 import punjabiGuide from '../../assets/data/pa/prayer_guide.json';
 
-const guideMap = {
-    hi: hindiGuide,
-    en: englishGuide,
-    pa: punjabiGuide,
-};
+const guideMap = { hi: hindiGuide, en: englishGuide, pa: punjabiGuide };
 
 export const PrayerGuideScreen = () => {
     const { language } = useLanguage();
@@ -24,70 +19,20 @@ export const PrayerGuideScreen = () => {
     }, [language]);
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-            <Text style={styles.header}>Way to Pray / विधि</Text>
+        <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 16 }}>
+            <Text className="text-2xl font-bold text-primary mb-6 text-center mt-2">Way to Pray / विधि</Text>
 
             {data.steps.map((step, index) => (
-                <View key={step.id} style={styles.stepContainer}>
-                    <View style={styles.stepNumber}>
-                        <Text style={styles.numberText}>{index + 1}</Text>
+                <View key={step.id} className="flex-row mb-5">
+                    <View className="w-10 h-10 rounded-full bg-secondary justify-center items-center mr-3 mt-1 shadow-sm">
+                        <Text className="font-bold text-text text-lg">{index + 1}</Text>
                     </View>
-                    <Card style={styles.stepCard}>
-                        <Text style={styles.stepTitle}>{step.title}</Text>
-                        <Text style={styles.stepDesc}>{step.description}</Text>
+                    <Card className="flex-1 bg-white shadow-sm border border-border/30">
+                        <Text className="text-[18px] font-bold text-text mb-2">{step.title}</Text>
+                        <Text className="text-base text-lightText leading-6">{step.description}</Text>
                     </Card>
                 </View>
             ))}
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.background,
-    },
-    content: {
-        padding: 16,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: Colors.primary,
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    stepContainer: {
-        flexDirection: 'row',
-        marginBottom: 16,
-    },
-    stepNumber: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.secondary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 12,
-        marginTop: 12,
-    },
-    numberText: {
-        fontWeight: 'bold',
-        color: Colors.text,
-        fontSize: 18,
-    },
-    stepCard: {
-        flex: 1,
-    },
-    stepTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: Colors.text,
-        marginBottom: 4,
-    },
-    stepDesc: {
-        fontSize: 16,
-        color: Colors.lightText,
-        lineHeight: 22,
-    }
-});

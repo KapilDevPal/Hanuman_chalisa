@@ -22,6 +22,8 @@ interface UserContextProps {
     startSankalp: (duration: number) => void;
     updateSankalpProgress: () => void;
     resetSankalp: () => void;
+    jaapName: string;
+    setJaapName: (name: string) => void;
     isLoading: boolean;
 }
 
@@ -34,6 +36,8 @@ const UserContext = createContext<UserContextProps>({
     startSankalp: () => { },
     updateSankalpProgress: () => { },
     resetSankalp: () => { },
+    jaapName: 'RAM',
+    setJaapName: () => { },
     isLoading: true,
 });
 
@@ -46,6 +50,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         duration: 0,
         daysCompleted: 0,
     });
+    const [jaapName, setJaapNameState] = useState('RAM');
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -59,11 +64,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const storedJaap = await AsyncStorage.getItem('jaap_count');
             const storedHistory = await AsyncStorage.getItem('jaap_history');
             const storedSankalp = await AsyncStorage.getItem('user_sankalp');
+            const storedJaapName = await AsyncStorage.getItem('jaap_name');
             const lastDate = await AsyncStorage.getItem('last_active_date');
 
             if (storedJaap) setJaapCount(parseInt(storedJaap, 10));
             if (storedHistory) setHistory(JSON.parse(storedHistory));
             if (storedSankalp) setSankalp(JSON.parse(storedSankalp));
+            if (storedJaapName) setJaapNameState(storedJaapName);
 
             // Check if it's a new day to reset daily count, but keep history? 
             // User request says "Save daily counts locally". 
@@ -133,6 +140,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await AsyncStorage.setItem('user_sankalp', JSON.stringify(emptySankalp));
     };
 
+    const setJaapName = async (name: string) => {
+        setJaapNameState(name);
+        await AsyncStorage.setItem('jaap_name', name);
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -144,6 +156,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 startSankalp,
                 updateSankalpProgress,
                 resetSankalp,
+                jaapName,
+                setJaapName,
                 isLoading,
             }}
         >

@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FF9933"
       },
-      "package": "com.kapildevpal.hanumanchalisa",
+      "package": "com.kapildevpal.hanuman_chalisa",
       "versionCode": 9
     },
     "web": {

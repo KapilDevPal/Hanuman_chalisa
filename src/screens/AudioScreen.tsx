@@ -1,74 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
-import { Audio } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '../constants/Colors';
+import { useAudio } from '../context/AudioContext';
 
 const { width } = Dimensions.get('window');
 
 export const AudioScreen = () => {
-    const [sound, setSound] = useState<Audio.Sound | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [position, setPosition] = useState(0);
-    const [duration, setDuration] = useState(0);
-
-    useEffect(() => {
-        loadAudio();
-        return () => {
-            if (sound) {
-                sound.unloadAsync();
-            }
-        };
-    }, []);
-
-    const loadAudio = async () => {
-        try {
-            const { sound: newSound } = await Audio.Sound.createAsync(
-                require('../../assets/audio/Shree Hanuman Chalisa-(Mr-Jat.in).mp3'),
-                { shouldPlay: false }
-            );
-            setSound(newSound);
-
-            newSound.setOnPlaybackStatusUpdate((status) => {
-                if (status.isLoaded) {
-                    setPosition(status.positionMillis);
-                    setDuration(status.durationMillis || 0);
-                    setIsPlaying(status.isPlaying);
-                }
-            });
-        } catch (error) {
-            console.log('Error loading sound', error);
-        }
-    };
-
-    const handlePlayPause = async () => {
-        if (!sound) return;
-        if (isPlaying) {
-            await sound.pauseAsync();
-        } else {
-            await sound.playAsync();
-        }
-    };
+    const {
+        isPlaying,
+        position,
+        duration,
+        togglePlayPause,
+        skipForward,
+        skipBackward
+    } = useAudio();
 
     const formatTime = (millis: number) => {
+        if (!millis || isNaN(millis)) return '0:00';
         const totalSeconds = millis / 1000;
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = Math.floor(totalSeconds % 60);
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    const skipForward = async () => {
-        if (sound) {
-            await sound.setPositionAsync(Math.min(position + 10000, duration));
-        }
-    };
-
-    const skipBackward = async () => {
-        if (sound) {
-            await sound.setPositionAsync(Math.max(position - 10000, 0));
-        }
-    };
+    const progressPercent = duration > 0 ? (position / duration) * 100 : 0;
 
     return (
         <LinearGradient
@@ -96,7 +53,7 @@ export const AudioScreen = () => {
                     <View className="h-1 bg-white/20 rounded-full w-full overflow-hidden">
                         <View
                             className="h-full bg-white"
-                            style={{ width: `${(position / duration) * 100}%` }}
+                            style={{ width: `${progressPercent}%` }}
                         />
                     </View>
                     <View className="flex-row justify-between mt-2">
@@ -112,7 +69,7 @@ export const AudioScreen = () => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={handlePlayPause}
+                        onPress={togglePlayPause}
                         className="bg-white rounded-full p-4 items-center justify-center"
                     >
                         <Ionicons
@@ -136,3 +93,4 @@ const styles = StyleSheet.create({
         flex: 1,
     }
 });
+

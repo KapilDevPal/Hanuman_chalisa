@@ -37,7 +37,7 @@ export const JaapScreen = () => {
                 <SonarButton onPress={handleTap} label={jaapName || 'RAM'} />
             </View>
 
-            <View className="pb-8">
+            <View className="pb-24">
                 <Text className="text-base text-text text-center mb-4 font-semibold opacity-80">Set Daily Goal</Text>
                 <View className="flex-row justify-around mb-6">
                     {[11, 21, 51, 108, 1008].map(val => (

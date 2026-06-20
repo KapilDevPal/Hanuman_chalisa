@@ -85,19 +85,61 @@ const AppNavigator = () => {
                 id="MainTabs"
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
+                        let icon;
+                        const iconColor = focused ? Colors.primary : Colors.lightText;
+                        const iconSize = focused ? size + 1 : size;
+
                         if (route.name === 'Home') {
-                            return <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />;
+                            icon = <Ionicons name={focused ? 'home' : 'home-outline'} size={iconSize} color={iconColor} />;
                         } else if (route.name === 'Chalisa') {
-                            return <FontAwesome5 name="book-open" size={size - 4} color={color} />;
+                            icon = <FontAwesome5 name="book-open" size={iconSize - 4} color={iconColor} />;
                         } else if (route.name === 'Jaap') {
-                            return <MaterialCommunityIcons name="meditation" size={size} color={color} />;
+                            icon = <MaterialCommunityIcons name="meditation" size={iconSize} color={iconColor} />;
                         } else if (route.name === 'Dashboard') {
-                            return <Ionicons name={focused ? 'stats-chart' : 'stats-chart-outline'} size={size} color={color} />;
+                            icon = <Ionicons name={focused ? 'stats-chart' : 'stats-chart-outline'} size={iconSize} color={iconColor} />;
                         }
+
+                        return (
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{
+                                    backgroundColor: focused ? 'rgba(255, 153, 51, 0.12)' : 'transparent',
+                                    paddingHorizontal: 16,
+                                    paddingVertical: 4,
+                                    borderRadius: 14,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginBottom: 2,
+                                }}>
+                                    {icon}
+                                </View>
+                            </View>
+                        );
                     },
                     tabBarActiveTintColor: Colors.primary,
                     tabBarInactiveTintColor: Colors.lightText,
-                    tabBarStyle: { backgroundColor: Colors.white, borderTopColor: Colors.border, height: 60, paddingBottom: 10, paddingTop: 5 },
+                    tabBarHideOnKeyboard: true,
+                    tabBarStyle: {
+                        position: 'absolute',
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                        elevation: 8,
+                        backgroundColor: Colors.white,
+                        borderRadius: 24,
+                        height: 68,
+                        borderTopWidth: 0,
+                        paddingBottom: 8,
+                        paddingTop: 8,
+                        shadowColor: '#000',
+                        shadowOpacity: 0.08,
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowRadius: 12,
+                    },
+                    tabBarLabelStyle: {
+                        fontSize: 11,
+                        fontWeight: '700',
+                        letterSpacing: 0.2,
+                    },
                     headerStyle: { backgroundColor: Colors.primary },
                     headerTintColor: Colors.white,
                     headerTitleStyle: { fontWeight: 'bold' }
@@ -113,3 +155,4 @@ const AppNavigator = () => {
 };
 
 export default AppNavigator;
+

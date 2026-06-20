@@ -60,7 +60,7 @@ export const DashboardScreen = () => {
                 <Text className="text-base text-lightText font-medium mt-1">Your spiritual journey at a glance.</Text>
             </View>
 
-            <View className="px-5 pb-20">
+            <View className="px-5 pb-32">
                 {/* Highlights */}
                 <View className="flex-row justify-between mb-8">
                     <LinearGradient

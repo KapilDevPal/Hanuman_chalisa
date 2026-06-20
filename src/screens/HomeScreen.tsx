@@ -189,7 +189,7 @@ export const HomeScreen = () => {
                 </TouchableOpacity>
             </View>
 
-            <View className="h-12" />
+            <View className="h-28" />
         </ScrollView>
     );
 };

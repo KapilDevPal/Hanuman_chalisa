@@ -104,7 +104,7 @@ export const SettingsScreen = () => {
                         </View>
                         <View className="flex-row items-center justify-between mb-3 pb-3 border-b border-[#FAF7F0]">
                             <Text className="text-xs text-text font-bold">Build</Text>
-                            <Text className="text-xs text-lightText font-extrabold">11</Text>
+                            <Text className="text-xs text-lightText font-extrabold">12</Text>
                         </View>
                         <View className="items-center mt-3">
                             <Text className="text-base font-black text-primary mb-1">Jai Bajrang Bali!</Text>

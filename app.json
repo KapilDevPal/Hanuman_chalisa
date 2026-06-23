@@ -21,7 +21,7 @@
         "backgroundColor": "#FF9933"
       },
       "package": "com.kapildevpal.hanuman_chalisa",
-      "versionCode": 11
+      "versionCode": 12
     },
     "web": {
       "favicon": "./assets/favicon.png"

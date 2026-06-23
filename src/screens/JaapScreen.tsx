@@ -26,33 +26,63 @@ export const JaapScreen = () => {
     };
 
     return (
-        <View className="flex-1 bg-background p-5 pt-10">
-            <View className="items-center mb-8">
-                <Text className="text-lg text-lightText font-semibold">Today's Count</Text>
-                <Text className="text-7xl font-bold text-primary my-2" style={{ fontVariant: ['tabular-nums'] }}>{jaapCount}</Text>
-                <Text className="text-base text-accent font-medium bg-white/50 px-4 py-1 rounded-full">Goal: {target} | Completed: {goalsCompleted}x</Text>
+        <View className="flex-1 bg-[#FAF7F0] p-5 pt-8">
+            {/* Header */}
+            <View className="items-start mb-6">
+                <Text className="text-3xl font-black text-text">Daily Jaap</Text>
+                <Text className="text-sm text-lightText font-semibold mt-1">
+                    Chant & keep track of your daily mantras.
+                </Text>
             </View>
 
-            <View className="flex-1 justify-center items-center">
+            {/* Scoreboard Card */}
+            <View className="bg-white border border-[#EADEC9] rounded-3xl p-6 mb-6 items-center shadow-sm w-full">
+                <Text className="text-[10px] text-lightText font-extrabold uppercase tracking-wider mb-2">Today's Count</Text>
+                <Text className="text-7xl font-black text-primary my-1" style={{ fontVariant: ['tabular-nums'] }}>
+                    {jaapCount}
+                </Text>
+                <View className="bg-[#FAF7F0] border border-[#EADEC9]/80 px-4 py-1.5 rounded-full mt-3">
+                    <Text className="text-xs text-[#5C4A33] font-extrabold">
+                        Goal: {target} | Completed: {goalsCompleted}x
+                    </Text>
+                </View>
+            </View>
+
+            {/* Tap Button Container */}
+            <View className="flex-1 justify-center items-center my-4">
                 <SonarButton onPress={handleTap} label={jaapName || 'RAM'} />
             </View>
 
-            <View className="pb-24">
-                <Text className="text-base text-text text-center mb-4 font-semibold opacity-80">Set Daily Goal</Text>
-                <View className="flex-row justify-around mb-6">
-                    {[11, 21, 51, 108, 1008].map(val => (
-                        <TouchableOpacity
-                            key={val}
-                            className={`py-2 px-4 rounded-full border border-border ${target === val ? 'bg-secondary border-primary' : 'bg-white'}`}
-                            onPress={() => setTarget(val)}
-                        >
-                            <Text className={`font-bold ${target === val ? 'text-text' : 'text-lightText'}`}>{val}</Text>
-                        </TouchableOpacity>
-                    ))}
+            {/* Controls Panel */}
+            <View className="pb-20 w-full">
+                {/* Goal Picker Card */}
+                <View className="bg-white border border-[#EADEC9] rounded-3xl p-5 mb-5 shadow-sm">
+                    <Text className="text-xs text-lightText font-extrabold uppercase tracking-wider mb-4 text-center">
+                        Set Daily Goal
+                    </Text>
+                    <View className="flex-row justify-around">
+                        {[11, 21, 51, 108, 1008].map(val => (
+                            <TouchableOpacity
+                                key={val}
+                                className={`py-2 px-3.5 rounded-xl border ${
+                                    target === val 
+                                        ? 'bg-primary border-primary shadow-sm' 
+                                        : 'bg-[#FAF7F0] border-[#EADEC9]'
+                                }`}
+                                onPress={() => setTarget(val)}
+                                activeOpacity={0.8}
+                            >
+                                <Text className={`font-black text-xs ${target === val ? 'text-white' : 'text-[#5C4A33]'}`}>
+                                    {val}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
                 </View>
 
-                <TouchableOpacity className="items-center p-3" onPress={resetDailyJaap}>
-                    <Text className="text-accent underline font-medium">Reset Counter</Text>
+                {/* Reset button */}
+                <TouchableOpacity className="items-center py-2 self-center" onPress={resetDailyJaap} activeOpacity={0.7}>
+                    <Text className="text-primary font-bold text-sm underline">Reset Counter</Text>
                 </TouchableOpacity>
             </View>
         </View>

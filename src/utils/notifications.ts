@@ -43,6 +43,7 @@ export const registerMediaCategories = async () => {
 const PLAYBACK_NOTIFICATION_ID = 'hanuman-chalisa-playback';
 
 export const showPlaybackNotification = async (isPlaying: boolean) => {
+    if (Platform.OS === 'android') return;
     try {
         await registerMediaCategories();
 
@@ -65,6 +66,7 @@ export const showPlaybackNotification = async (isPlaying: boolean) => {
 };
 
 export const dismissPlaybackNotification = async () => {
+    if (Platform.OS === 'android') return;
     try {
         await Notifications.dismissNotificationAsync(PLAYBACK_NOTIFICATION_ID);
     } catch (error) {

@@ -100,18 +100,15 @@ const AppNavigator = () => {
                         }
 
                         return (
-                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <View style={{
-                                    backgroundColor: focused ? 'rgba(255, 153, 51, 0.12)' : 'transparent',
-                                    paddingHorizontal: 16,
-                                    paddingVertical: 4,
-                                    borderRadius: 14,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: 2,
-                                }}>
-                                    {icon}
-                                </View>
+                            <View style={{
+                                width: 52,
+                                height: 30,
+                                backgroundColor: focused ? 'rgba(255, 153, 51, 0.12)' : 'transparent',
+                                borderRadius: 15,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                {icon}
                             </View>
                         );
                     },
@@ -126,10 +123,10 @@ const AppNavigator = () => {
                         elevation: 8,
                         backgroundColor: Colors.white,
                         borderRadius: 24,
-                        height: 68,
+                        height: 80,
                         borderTopWidth: 0,
-                        paddingBottom: 8,
-                        paddingTop: 8,
+                        paddingBottom: 10,
+                        paddingTop: 10,
                         shadowColor: '#000',
                         shadowOpacity: 0.08,
                         shadowOffset: { width: 0, height: 4 },

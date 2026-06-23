@@ -54,7 +54,7 @@ export const HomeScreen = () => {
                         onPress={() => navigation.navigate('Settings')}
                         className="p-3 bg-white/10 rounded-2xl border border-white/20 shadow-sm"
                     >
-                        <Ionicons name="grid-outline" size={24} color="#FFF" />
+                        <Ionicons name="settings-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
                 </View>
 
@@ -105,24 +105,26 @@ export const HomeScreen = () => {
                 </TouchableOpacity>
 
                 {/* Main Actions */}
-                <View className="flex-row justify-between mb-6 mt-8">
-                    <TouchableOpacity className="w-[47%]" onPress={() => navigation.navigate('Jaap')}>
-                        <Card className="items-center py-6 h-[150px] justify-center bg-white shadow-xl border-b-4 border-primary">
-                            <View className="bg-orange-50 p-3 rounded-2xl mb-3">
-                                <MaterialCommunityIcons name="meditation" size={32} color={Colors.primary} />
+                <View className="flex-row mb-6 mt-8">
+                    <TouchableOpacity className="flex-1 mr-2" onPress={() => navigation.navigate('Jaap')}>
+                        <Card className="items-center py-4 px-2 justify-center bg-white shadow-xl border-b-4 border-primary">
+                            <View className="bg-orange-50 p-2.5 rounded-2xl mb-2">
+                                <MaterialCommunityIcons name="meditation" size={24} color={Colors.primary} />
                             </View>
-                            <Text className="text-3xl font-black text-primary">{jaapCount}</Text>
-                            <Text className="text-xs text-lightText font-bold uppercase tracking-tighter">Jaap Today</Text>
+                            <Text className="text-2xl font-black text-primary text-center w-full" numberOfLines={1} adjustsFontSizeToFit>{jaapCount}</Text>
+                            <Text className="text-[10px] text-lightText font-extrabold uppercase tracking-wide mt-1 text-center w-full" numberOfLines={1} adjustsFontSizeToFit>Jaap Today</Text>
                         </Card>
                     </TouchableOpacity>
 
-                    <TouchableOpacity className="w-[47%]" onPress={() => navigation.navigate('Sankalp')}>
-                        <Card className="items-center py-6 h-[150px] justify-center bg-white shadow-xl border-b-4 border-accent">
-                            <View className="bg-red-50 p-3 rounded-2xl mb-3">
-                                <Ionicons name="flag" size={32} color={Colors.accent} />
+                    <TouchableOpacity className="flex-1 ml-2" onPress={() => navigation.navigate('Sankalp')}>
+                        <Card className="items-center py-4 px-2 justify-center bg-white shadow-xl border-b-4 border-accent">
+                            <View className="bg-red-50 p-2.5 rounded-2xl mb-2">
+                                <Ionicons name="flag" size={24} color={Colors.accent} />
                             </View>
-                            <Text className="text-3xl font-black text-primary">{sankalp.active ? `${sankalp.daysCompleted}/${sankalp.duration}` : '-'}</Text>
-                            <Text className="text-xs text-lightText font-bold uppercase tracking-tighter">Sankalp Day</Text>
+                            <Text className="text-2xl font-black text-primary text-center w-full" numberOfLines={1} adjustsFontSizeToFit>
+                                {sankalp.active ? `${sankalp.daysCompleted}/${sankalp.duration}` : '-'}
+                            </Text>
+                            <Text className="text-[10px] text-lightText font-extrabold uppercase tracking-wide mt-1 text-center w-full" numberOfLines={1} adjustsFontSizeToFit>Sankalp Day</Text>
                         </Card>
                     </TouchableOpacity>
                 </View>

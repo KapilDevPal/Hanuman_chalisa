@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { View, Text, ScrollView } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useUser } from '../context/UserContext';
 import { Colors } from '../constants/Colors';
-import { Card } from '../components/Card';
-import { LinearGradient } from 'expo-linear-gradient';
 
 export const DashboardScreen = () => {
     const { history, sankalp, jaapCount } = useUser();
@@ -53,118 +51,105 @@ export const DashboardScreen = () => {
     }, [history, jaapCount]);
 
     return (
-        <ScrollView className="flex-1 bg-[#fcfcfc]" showsVerticalScrollIndicator={false}>
+        <ScrollView className="flex-1 bg-[#FAF7F0]" showsVerticalScrollIndicator={false}>
             {/* Header / Summary */}
             <View className="px-6 pt-10 pb-6">
-                <Text className="text-4xl font-black text-text">Insights</Text>
-                <Text className="text-base text-lightText font-medium mt-1">Your spiritual journey at a glance.</Text>
+                <Text className="text-3xl font-black text-text">Insights</Text>
+                <Text className="text-sm text-lightText font-semibold mt-1">Your spiritual journey at a glance.</Text>
             </View>
 
             <View className="px-5 pb-32">
-                {/* Highlights */}
-                <View className="flex-row justify-between mb-8">
-                    <LinearGradient
-                        colors={[Colors.primary, '#FFB347']}
-                        className="flex-1 rounded-[30px] p-6 mr-2 shadow-lg"
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                    >
-                        <View className="flex-row justify-between items-start mb-4">
-                            <View className="bg-white/20 p-2 rounded-xl">
-                                <Ionicons name="flame" size={24} color="#FFF" />
+                {/* Highlights Grid */}
+                <View className="flex-row justify-between mb-6">
+                    <View className="flex-1 bg-white border border-[#EADEC9] rounded-3xl p-5 mr-2 shadow-sm">
+                        <View className="flex-row justify-between items-start mb-3">
+                            <View className="bg-primary/10 p-2 rounded-xl">
+                                <Ionicons name="flame" size={20} color={Colors.primary} />
                             </View>
-                            <Text className="text-white/60 text-xs font-bold uppercase tracking-widest">Active</Text>
+                            <Text className="text-lightText text-[10px] font-extrabold uppercase tracking-wider">Streak</Text>
                         </View>
-                        <Text className="text-4xl font-black text-white">{stats.streak}</Text>
-                        <Text className="text-sm text-white/80 font-bold mt-1">Day Streak</Text>
-                    </LinearGradient>
+                        <Text className="text-3xl font-black text-text">{stats.streak}</Text>
+                        <Text className="text-xs text-lightText font-semibold mt-1">Days Active</Text>
+                    </View>
 
-                    <LinearGradient
-                        colors={['#6A11CB', '#2575FC']}
-                        className="flex-1 rounded-[30px] p-6 ml-2 shadow-lg"
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                    >
-                        <View className="flex-row justify-between items-start mb-4">
-                            <View className="bg-white/20 p-2 rounded-xl">
-                                <MaterialCommunityIcons name="meditation" size={24} color="#FFF" />
+                    <View className="flex-1 bg-[#FFF8EE] border border-[#FFD59A] rounded-3xl p-5 ml-2 shadow-sm">
+                        <View className="flex-row justify-between items-start mb-3">
+                            <View className="bg-primary/10 p-2 rounded-xl">
+                                <MaterialCommunityIcons name="meditation" size={20} color={Colors.primary} />
                             </View>
-                            <Text className="text-white/60 text-xs font-bold uppercase tracking-widest">Target</Text>
+                            <Text className="text-lightText text-[10px] font-extrabold uppercase tracking-wider">Month</Text>
                         </View>
-                        <Text className="text-4xl font-black text-white">{stats.totalJaapMonth}</Text>
-                        <Text className="text-sm text-white/80 font-bold mt-1">Monthly Jaap</Text>
-                    </LinearGradient>
+                        <Text className="text-3xl font-black text-[#5C3A00]">{stats.totalJaapMonth}</Text>
+                        <Text className="text-xs text-[#5C3A00]/70 font-semibold mt-1">Total Jaap</Text>
+                    </View>
                 </View>
 
                 {/* Sankalp Card */}
-                <Card className="bg-white p-7 mb-8 rounded-[35px] shadow-2xl border border-gray-50 overflow-hidden relative">
-                    <View className="flex-row justify-between items-center mb-6">
+                <View className="bg-white border border-[#EADEC9] rounded-3xl p-6 mb-6 shadow-sm">
+                    <View className="flex-row justify-between items-center mb-5">
                         <View>
-                            <Text className="text-xl font-black text-text">Sankalp Goal</Text>
-                            <Text className="text-xs text-lightText font-bold uppercase opacity-60">Religious Discipline</Text>
+                            <Text className="text-lg font-black text-text">Sankalp Progress</Text>
+                            <Text className="text-[10px] font-bold text-lightText uppercase tracking-wider">Spiritual Vow</Text>
                         </View>
-                        <View className="bg-red-50 p-2.5 rounded-2xl">
-                            <Ionicons name="flag" size={24} color={Colors.accent} />
+                        <View className="bg-primary/10 p-2 rounded-xl">
+                            <Ionicons name="flag" size={20} color={Colors.primary} />
                         </View>
                     </View>
 
                     {sankalp.active ? (
                         <View>
-                            <View className="h-4 bg-gray-100 rounded-full overflow-hidden mb-3">
-                                <LinearGradient
-                                    colors={[Colors.primary, Colors.accent]}
-                                    start={{ x: 0, y: 0 }}
-                                    end={{ x: 1, y: 0 }}
-                                    className="h-full"
+                            <View className="h-3 bg-[#FAF7F0] border border-[#EADEC9]/40 rounded-full overflow-hidden mb-3">
+                                <View
+                                    className="h-full bg-primary rounded-full"
                                     style={{ width: `${(sankalp.daysCompleted / sankalp.duration) * 100}%` }}
                                 />
                             </View>
                             <View className="flex-row justify-between items-center">
-                                <Text className="text-primary font-black text-lg">
-                                    {Math.round((sankalp.daysCompleted / sankalp.duration) * 100)}%
+                                <Text className="text-primary font-black text-sm">
+                                    {Math.round((sankalp.daysCompleted / sankalp.duration) * 100)}% Complete
                                 </Text>
-                                <Text className="text-lightText font-bold">
-                                    {sankalp.daysCompleted} of {sankalp.duration} Days
+                                <Text className="text-lightText font-bold text-xs">
+                                    {sankalp.daysCompleted} / {sankalp.duration} Days
                                 </Text>
                             </View>
                         </View>
                     ) : (
-                        <View className="items-center py-4 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
-                            <Ionicons name="add-circle-outline" size={32} color={Colors.lightText} />
-                            <Text className="text-lightText font-medium mt-2">No active Sankalp</Text>
+                        <View className="items-center py-5 bg-[#FAF7F0] rounded-2xl border border-dashed border-[#EADEC9]">
+                            <Ionicons name="add-circle-outline" size={24} color={Colors.lightText} />
+                            <Text className="text-lightText text-xs font-bold mt-1.5">No Active Sankalp</Text>
                         </View>
                     )}
-                </Card>
+                </View>
 
-                {/* Activity List */}
-                <Text className="text-xl font-black text-text mb-5 ml-2">Recent Journey</Text>
-                <View className="bg-white rounded-[35px] p-2 shadow-sm border border-gray-50">
+                {/* Recent Journey List */}
+                <Text className="text-lg font-black text-text mb-4 ml-1">Recent Journey</Text>
+                <View className="bg-white border border-[#EADEC9] rounded-3xl p-2 shadow-sm">
                     {history.length > 0 ? (
-                        history.slice(-7).reverse().map((entry, index) => (
-                            <View key={index} className="flex-row items-center px-5 py-5">
-                                <View className="relative items-center mr-5">
-                                    <View className="w-12 h-12 bg-orange-50 rounded-2xl items-center justify-center border border-orange-100">
-                                        <Text className="text-primary font-black text-sm">{entry.date.split('-')[2]}</Text>
-                                    </View>
-                                    {index !== history.slice(-7).length - 1 && (
-                                        <View className="absolute top-12 bottom-[-20px] w-0.5 bg-gray-100" />
-                                    )}
+                        history.slice(-7).reverse().map((entry, index, arr) => (
+                            <View 
+                                key={index} 
+                                className={`flex-row items-center px-4 py-4 ${
+                                    index !== arr.length - 1 ? 'border-b border-[#FAF7F0]' : ''
+                                }`}
+                            >
+                                <View className="w-10 h-10 bg-[#FAF7F0] border border-[#EADEC9]/60 rounded-xl items-center justify-center mr-4">
+                                    <Text className="text-primary font-bold text-xs">{entry.date.split('-')[2]}</Text>
                                 </View>
                                 <View className="flex-1">
-                                    <Text className="text-text font-bold text-base">
+                                    <Text className="text-text font-bold text-sm">
                                         {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', year: 'numeric', day: 'numeric' })}
                                     </Text>
-                                    <Text className="text-lightText text-sm">Devotional Chant Activity</Text>
+                                    <Text className="text-lightText text-xs">Completed Jaap session</Text>
                                 </View>
-                                <View className="bg-green-50 px-3 py-1.5 rounded-full">
-                                    <Text className="text-green-600 font-black text-xs">+{entry.count}</Text>
+                                <View className="bg-green-50 px-2.5 py-1 rounded-full border border-green-100">
+                                    <Text className="text-green-600 font-extrabold text-xs">+{entry.count}</Text>
                                 </View>
                             </View>
                         ))
                     ) : (
-                        <View className="p-10 items-center">
-                            <Ionicons name="calendar-outline" size={48} color={Colors.border} />
-                            <Text className="text-lightText mt-4 font-bold">Your journey begins soon.</Text>
+                        <View className="p-8 items-center">
+                            <Ionicons name="calendar-outline" size={32} color={Colors.border} />
+                            <Text className="text-lightText mt-2 text-xs font-bold">Your journey begins soon.</Text>
                         </View>
                     )}
                 </View>

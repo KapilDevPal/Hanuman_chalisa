@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, Animated, Easing, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Animated, Easing, StyleSheet, Dimensions, Image } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { LanguageProvider } from './src/context/LanguageContext';
 import { UserProvider } from './src/context/UserContext';
@@ -54,7 +54,7 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
         Animated.timing(titleOpacity, { toValue: 1, duration: 500, useNativeDriver: true }),
       ]),
       Animated.timing(subtitleOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
-      Animated.delay(900),
+      Animated.delay(1200),
       // Fade out
       Animated.timing(containerOpacity, { toValue: 0, duration: 500, useNativeDriver: true }),
     ]).start(() => onDone());
@@ -90,14 +90,14 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
           />
         ))}
 
-        {/* OM symbol circle */}
+        {/* Logo Container */}
         <Animated.View
           style={[
             styles.logoCircle,
             { transform: [{ scale: logoScale }], opacity: logoOpacity },
           ]}
         >
-          <Text style={styles.omSymbol}>ॐ</Text>
+          <Image source={require('./assets/icon.png')} style={styles.logoImage} />
         </Animated.View>
 
         {/* App name */}
@@ -108,7 +108,7 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
 
         {/* Sub text */}
         <Animated.View style={{ opacity: subtitleOpacity, marginTop: 14 }}>
-          <Text style={styles.subtext}>जय श्री राम 🙏</Text>
+          <Text style={styles.subtext}>Jai Shri Ram 🙏</Text>
         </Animated.View>
       </View>
 
@@ -183,24 +183,22 @@ const styles = StyleSheet.create({
     width: 130,
     height: 130,
     borderRadius: 65,
-    backgroundColor: 'rgba(255,255,255,0.22)',
-    borderWidth: 2.5,
-    borderColor: 'rgba(255,255,255,0.5)',
+    backgroundColor: '#fff',
+    borderWidth: 3.5,
+    borderColor: 'rgba(255,255,255,0.85)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOpacity: 0.18,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 12,
+    shadowOpacity: 0.25,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 14,
+    overflow: 'hidden',
   },
-  omSymbol: {
-    fontSize: 64,
-    color: '#fff',
-    fontWeight: '900',
-    textShadowColor: 'rgba(0,0,0,0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 8,
+  logoImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   appName: {
     fontSize: 28,

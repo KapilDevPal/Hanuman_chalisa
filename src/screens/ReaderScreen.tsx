@@ -9,10 +9,23 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 export const ReaderScreen = () => {
     const route = useRoute<any>();
     const { textId } = route.params;
-    const { language, setLanguage } = useLanguage();
+
+    // Global language (from Settings) initialises the content language.
+    // The in-reader language toggle is LOCAL — it does NOT update global UI language.
+    const { language } = useLanguage();
+    const [contentLang, setContentLang] = useState<string>(language);
+
+    // If the user changes language in Settings while this screen is mounted, sync it.
+    React.useEffect(() => {
+        setContentLang(language);
+    }, [language]);
 
     // @ts-ignore
-    const textData = textLibrary[textId] ? (textLibrary[textId][language] || textLibrary[textId]['hi']) : null;
+    const textEntry = textLibrary[textId];
+    // @ts-ignore
+    const textData = textEntry ? (textEntry[contentLang] || textEntry['hi']) : null;
+    // @ts-ignore
+    const hasTranslation = (lang: string) => textEntry && textEntry[lang] !== undefined;
 
     const [fontSize, setFontSize] = useState(20);
     const [progress, setProgress] = useState(0);
@@ -39,9 +52,9 @@ export const ReaderScreen = () => {
             </View>
 
             {/* Scrollable Reader */}
-            <ScrollView 
-                contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 100 }} 
-                onScroll={handleScroll} 
+            <ScrollView
+                contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 100 }}
+                onScroll={handleScroll}
                 scrollEventThrottle={16}
                 showsVerticalScrollIndicator={false}
             >
@@ -67,13 +80,15 @@ export const ReaderScreen = () => {
                                 { code: 'en', label: 'EN' },
                                 { code: 'pa', label: 'PA' }
                             ].map((item) => {
-                                const isActive = language === item.code;
+                                const isActive = contentLang === item.code;
+                                const available = hasTranslation(item.code);
                                 return (
                                     <TouchableOpacity
                                         key={item.code}
-                                        onPress={() => setLanguage(item.code as any)}
+                                        onPress={() => available && setContentLang(item.code)}
                                         className={`px-3 py-1.5 rounded-lg ${isActive ? 'bg-primary' : ''}`}
-                                        activeOpacity={0.8}
+                                        activeOpacity={available ? 0.8 : 0.4}
+                                        style={{ opacity: available ? 1 : 0.4 }}
                                     >
                                         <Text className={`font-extrabold text-[10px] ${isActive ? 'text-white' : 'text-[#5C4A33]'}`}>
                                             {item.label}
@@ -109,13 +124,13 @@ export const ReaderScreen = () => {
                 {/* Content Verses */}
                 <View className="mb-6">
                     {textData.content.map((line: string, index: number) => (
-                        <View 
-                            key={`line_${index}`} 
+                        <View
+                            key={`line_${index}`}
                             className="mb-4 bg-white border border-[#EADEC9] rounded-2xl p-5 shadow-sm"
                             style={{ elevation: 1 }}
                         >
-                            <Text 
-                                style={{ fontSize, lineHeight: fontSize * 1.6 }} 
+                            <Text
+                                style={{ fontSize, lineHeight: fontSize * 1.6 }}
                                 className="text-[#3A2D1B] text-center font-bold"
                             >
                                 {line}

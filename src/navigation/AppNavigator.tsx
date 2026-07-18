@@ -16,69 +16,75 @@ import { PrayerGuideScreen } from '../screens/PrayerGuideScreen';
 import { LibraryScreen } from '../screens/LibraryScreen';
 import { ReaderScreen } from '../screens/ReaderScreen';
 import { AudioScreen } from '../screens/AudioScreen';
+import { TemplesScreen } from '../screens/TemplesScreen';
 import { Colors } from '../constants/Colors';
+import { useT } from '../hooks/useT';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const HomeStack = () => (
-    <Stack.Navigator
-        id="HomeStack"
-        screenOptions={{
-            headerStyle: {
-                backgroundColor: Colors.primary,
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-            },
-            headerTintColor: Colors.white,
-            headerTitleStyle: {
-                fontWeight: '900',
-                fontSize: 20,
-                letterSpacing: 0.5,
-            },
-            headerTitleAlign: 'center',
-            cardStyle: { backgroundColor: Colors.background },
-        }}
-    >
-        <Stack.Screen name="HomeMain" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-                title: 'App Settings',
-                headerStyle: { backgroundColor: Colors.background },
-                headerTintColor: Colors.text,
-                headerTitleStyle: { color: Colors.text, fontWeight: '900' },
+const HomeStack = () => {
+    const { T } = useT();
+    return (
+        <Stack.Navigator
+            id="HomeStack"
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: Colors.primary,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                headerTintColor: Colors.white,
+                headerTitleStyle: {
+                    fontWeight: '900',
+                    fontSize: 20,
+                    letterSpacing: 0.5,
+                },
+                headerTitleAlign: 'center',
+                cardStyle: { backgroundColor: Colors.background },
             }}
-        />
-        <Stack.Screen name="Sankalp" component={SankalpScreen} options={{ title: 'Sankalp' }} />
-        <Stack.Screen name="Wisdom" component={WisdomScreen} options={{ title: 'Daily Wisdom' }} />
-        <Stack.Screen name="PrayerGuide" component={PrayerGuideScreen} options={{ title: 'Prayer Guide' }} />
-        <Stack.Screen name="Library" component={LibraryScreen} options={{ title: 'Spiritual Library' }} />
-        <Stack.Screen name="Reader" component={ReaderScreen} options={({ route }: any) => ({ title: route.params?.title || 'Read' })} />
-        <Stack.Screen
-            name="Audio"
-            component={AudioScreen}
-            options={{
-                headerShown: true,
-                title: '',
-                headerTransparent: true,
-                headerTintColor: '#FFF',
-                headerLeft: (props) => (
-                    <TouchableOpacity
-                        onPress={props.onPress}
-                        className="ml-4 bg-black/20 p-2 rounded-full"
-                    >
-                        <Ionicons name="chevron-down" size={28} color="white" />
-                    </TouchableOpacity>
-                )
-            }}
-        />
-    </Stack.Navigator>
-);
+        >
+            <Stack.Screen name="HomeMain" component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                    title: T('header_settings'),
+                    headerStyle: { backgroundColor: Colors.background },
+                    headerTintColor: Colors.text,
+                    headerTitleStyle: { color: Colors.text, fontWeight: '900' },
+                }}
+            />
+            <Stack.Screen name="Sankalp" component={SankalpScreen} options={{ title: T('header_sankalp') }} />
+            <Stack.Screen name="Wisdom" component={WisdomScreen} options={{ title: T('header_wisdom') }} />
+            <Stack.Screen name="PrayerGuide" component={PrayerGuideScreen} options={{ title: T('header_prayer') }} />
+            <Stack.Screen name="Library" component={LibraryScreen} options={{ title: T('header_library') }} />
+            <Stack.Screen name="Reader" component={ReaderScreen} options={({ route }: any) => ({ title: route.params?.title || T('header_library') })} />
+            <Stack.Screen
+                name="Audio"
+                component={AudioScreen}
+                options={{
+                    headerShown: true,
+                    title: '',
+                    headerTransparent: true,
+                    headerTintColor: '#FFF',
+                    headerLeft: (props) => (
+                        <TouchableOpacity
+                            onPress={props.onPress}
+                            className="ml-4 bg-black/20 p-2 rounded-full"
+                        >
+                            <Ionicons name="chevron-down" size={28} color="white" />
+                        </TouchableOpacity>
+                    )
+                }}
+            />
+        </Stack.Navigator>
+    );
+};
 
 const AppNavigator = () => {
+    const { T } = useT();
     return (
         <NavigationContainer>
             <Tab.Navigator
@@ -97,6 +103,8 @@ const AppNavigator = () => {
                             icon = <MaterialCommunityIcons name="meditation" size={iconSize} color={iconColor} />;
                         } else if (route.name === 'Dashboard') {
                             icon = <Ionicons name={focused ? 'stats-chart' : 'stats-chart-outline'} size={iconSize} color={iconColor} />;
+                        } else if (route.name === 'Temples') {
+                            icon = <Ionicons name={focused ? 'ellipsis-horizontal-circle' : 'ellipsis-horizontal-circle-outline'} size={iconSize} color={iconColor} />;
                         }
 
                         return (
@@ -142,14 +150,14 @@ const AppNavigator = () => {
                     headerTitleStyle: { fontWeight: 'bold' }
                 })}
             >
-                <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
-                <Tab.Screen name="Chalisa" component={ChalisaScreen} options={{ title: 'Chalisa' }} />
-                <Tab.Screen name="Jaap" component={JaapScreen} options={{ title: 'Jaap' }} />
-                <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Stats' }} />
+                <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false, tabBarLabel: T('nav_home') }} />
+                <Tab.Screen name="Chalisa" component={ChalisaScreen} options={{ tabBarLabel: T('nav_chalisa'), title: T('header_chalisa') }} />
+                <Tab.Screen name="Jaap" component={JaapScreen} options={{ tabBarLabel: T('nav_jaap'), title: T('header_jaap') }} />
+                <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ tabBarLabel: T('nav_stats'), title: T('header_stats') }} />
+                <Tab.Screen name="Temples" component={TemplesScreen} options={{ tabBarLabel: T('nav_more'), title: T('header_more'), headerShown: false }} />
             </Tab.Navigator>
         </NavigationContainer>
     );
 };
 
 export default AppNavigator;
-

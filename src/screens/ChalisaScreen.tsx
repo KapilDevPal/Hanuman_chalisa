@@ -11,14 +11,27 @@ import punjabiChalisa from '../../assets/data/pa/chalisa.json';
 const dataMap = { hi: hindiChalisa, en: englishChalisa, pa: punjabiChalisa };
 
 export const ChalisaScreen = () => {
-    const { language, setLanguage } = useLanguage();
-    const [data, setData] = useState(dataMap['hi']);
+    // Read global UI language (set from Settings) to initialise content, but
+    // toggling language inside this screen is LOCAL — it must NOT change the
+    // global UI language (which controls nav labels, settings text, etc.).
+    const { language } = useLanguage();
+    const [contentLang, setContentLang] = useState<'hi' | 'en' | 'pa'>(language as any);
+    const [data, setData] = useState(dataMap[language as keyof typeof dataMap] || dataMap['hi']);
     const [fontSize, setFontSize] = useState(20);
     const [progress, setProgress] = useState(0);
 
+    // When global language changes (user goes to Settings and picks a language),
+    // sync the content language too.
     useEffect(() => {
-        setData(dataMap[language] || dataMap['hi']);
+        setContentLang(language as any);
+        setData(dataMap[language as keyof typeof dataMap] || dataMap['hi']);
     }, [language]);
+
+    // Local content-language switch
+    const handleContentLang = (lang: 'hi' | 'en' | 'pa') => {
+        setContentLang(lang);
+        setData(dataMap[lang] || dataMap['hi']);
+    };
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -62,11 +75,11 @@ export const ChalisaScreen = () => {
                                 { code: 'en', label: 'EN' },
                                 { code: 'pa', label: 'PA' }
                             ].map((item) => {
-                                const isActive = language === item.code;
+                                const isActive = contentLang === item.code;
                                 return (
                                     <TouchableOpacity
                                         key={item.code}
-                                        onPress={() => setLanguage(item.code as any)}
+                                        onPress={() => handleContentLang(item.code as any)}
                                         className={`px-3 py-1.5 rounded-lg ${isActive ? 'bg-primary' : ''}`}
                                         activeOpacity={0.8}
                                     >

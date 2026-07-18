@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors';
+import { useT } from '../hooks/useT';
 import { textList } from '../data/TextLibrary';
 
 const libraryItemConfigs: Record<string, { icon: string; lib: any; color: string }> = {
@@ -21,6 +22,7 @@ const libraryItemConfigs: Record<string, { icon: string; lib: any; color: string
 
 export const LibraryScreen = () => {
     const navigation = useNavigation<any>();
+    const { T } = useT();
 
     const getCategoryDetails = (id: string) => {
         return libraryItemConfigs[id] || { icon: 'scroll', lib: FontAwesome5, color: '#6A994E' };
@@ -30,10 +32,8 @@ export const LibraryScreen = () => {
         <ScrollView className="flex-1 bg-[#FAF7F0]" showsVerticalScrollIndicator={false}>
             {/* Header Banner */}
             <View className="px-6 pt-10 pb-4">
-                <Text className="text-3xl font-black text-text">Divine Library</Text>
-                <Text className="text-sm text-lightText font-semibold mt-1">
-                    Explore sacred texts, hymns, and spiritual compositions.
-                </Text>
+                <Text className="text-3xl font-black text-text">{T('library_title')}</Text>
+                <Text className="text-sm text-lightText font-semibold mt-1">{T('library_subtitle')}</Text>
             </View>
 
             <View className="px-5 py-2 pb-24">
@@ -59,7 +59,7 @@ export const LibraryScreen = () => {
                                     >
                                         {item.title}
                                     </Text>
-                                    <Text className="text-[10px] text-[#A6947D] font-bold mt-0.5">Read sacred text</Text>
+                                    <Text className="text-[10px] text-[#A6947D] font-bold mt-0.5">{T('library_read')}</Text>
                                 </View>
                                 <Ionicons name="chevron-forward" size={16} color="#A6947D" className="ml-2" />
                             </TouchableOpacity>

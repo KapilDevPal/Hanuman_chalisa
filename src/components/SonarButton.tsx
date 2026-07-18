@@ -8,83 +8,83 @@ interface SonarButtonProps {
 }
 
 export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
-    // We'll create 3 animated values for the 3 expanding rings
-    const ring1 = useRef(new Animated.Value(0)).current;
-    const ring2 = useRef(new Animated.Value(0)).current;
-    const ring3 = useRef(new Animated.Value(0)).current;
-
+    // Single ring per tap — clean, crisp animation
+    const ring = useRef(new Animated.Value(0)).current;
     const buttonScale = useRef(new Animated.Value(1)).current;
+    // Track if ring animation is running so we can restart cleanly
+    const ringAnim = useRef<Animated.CompositeAnimation | null>(null);
 
-    const runRingAnimation = (animValue: Animated.Value, delay: number) => {
-        animValue.setValue(0);
-        Animated.sequence([
-            Animated.delay(delay),
-            Animated.timing(animValue, {
-                toValue: 1,
-                duration: 2000,
-                easing: Easing.out(Easing.quad),
-                useNativeDriver: true,
-            })
-        ]).start();
+    const fireRing = () => {
+        // Stop any existing ring animation and restart immediately
+        if (ringAnim.current) {
+            ringAnim.current.stop();
+        }
+        ring.setValue(0);
+        ringAnim.current = Animated.timing(ring, {
+            toValue: 1,
+            duration: 700,
+            easing: Easing.out(Easing.cubic),
+            useNativeDriver: true,
+        });
+        ringAnim.current.start(() => {
+            ringAnim.current = null;
+        });
     };
 
     const handlePressIn = () => {
         Animated.spring(buttonScale, {
-            toValue: 0.9,
+            toValue: 0.92,
             useNativeDriver: true,
+            friction: 8,
+            tension: 100,
         }).start();
-
-        // Trigger the rings on press
-        runRingAnimation(ring1, 0);
-        runRingAnimation(ring2, 200);
-        runRingAnimation(ring3, 400);
+        fireRing();
     };
 
     const handlePressOut = () => {
         Animated.spring(buttonScale, {
             toValue: 1,
-            friction: 3,
-            tension: 40,
+            friction: 4,
+            tension: 60,
             useNativeDriver: true,
         }).start();
         onPress();
     };
 
-    const getRingStyle = (animValue: Animated.Value) => ({
-        transform: [
-            {
-                scale: animValue.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [1, 2.5],
-                }),
-            },
-        ],
-        opacity: animValue.interpolate({
-            inputRange: [0, 0.7, 1],
-            outputRange: [0.6, 0.2, 0],
-        }),
+    const ringScale = ring.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 2.2],
+    });
+    const ringOpacity = ring.interpolate({
+        inputRange: [0, 0.4, 1],
+        outputRange: [0.55, 0.2, 0],
     });
 
     return (
-        <View className="items-center justify-center flex-1">
-            {/* The Sonar Rings */}
-            <Animated.View style={[styles.ring, getRingStyle(ring1)]} />
-            <Animated.View style={[styles.ring, getRingStyle(ring2)]} />
-            <Animated.View style={[styles.ring, getRingStyle(ring3)]} />
+        <View style={styles.container}>
+            {/* Single wave ring */}
+            <Animated.View
+                style={[
+                    styles.ring,
+                    {
+                        transform: [{ scale: ringScale }],
+                        opacity: ringOpacity,
+                    },
+                ]}
+            />
 
-            {/* The Main Button */}
+            {/* Main Button */}
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
                 <TouchableOpacity
-                    activeOpacity={0.9}
+                    activeOpacity={1}
                     onPressIn={handlePressIn}
                     onPressOut={handlePressOut}
-                    className="w-56 h-56 rounded-full bg-primary items-center justify-center shadow-lg border-4 border-secondary/50 relative z-10"
-                    style={{ elevation: 12, shadowColor: Colors.primary, shadowOpacity: 0.5, shadowRadius: 15 }}
+                    style={styles.button}
                 >
-                    <Text className="text-5xl font-extrabold text-white text-center px-4" adjustsFontSizeToFit numberOfLines={1}>
+                    <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>
                         {label}
                     </Text>
-                    <Text className="text-white/80 mt-2 text-base font-medium">Tap to Chant</Text>
+                    <Text style={styles.sublabel}>Tap to Chant</Text>
                 </TouchableOpacity>
             </Animated.View>
         </View>
@@ -92,13 +92,48 @@ export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     ring: {
         position: 'absolute',
         width: 224,
         height: 224,
         borderRadius: 112,
         backgroundColor: Colors.primary,
-        borderWidth: 2,
-        borderColor: Colors.secondary,
-    }
+        borderWidth: 0,
+    },
+    button: {
+        width: 224,
+        height: 224,
+        borderRadius: 112,
+        backgroundColor: Colors.primary,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 14,
+        shadowColor: Colors.primary,
+        shadowOpacity: 0.45,
+        shadowRadius: 18,
+        shadowOffset: { width: 0, height: 6 },
+        // Inner highlight border
+        borderWidth: 3,
+        borderColor: 'rgba(255, 218, 140, 0.35)',
+        paddingHorizontal: 20,
+    },
+    label: {
+        fontSize: 44,
+        fontWeight: '900',
+        color: '#fff',
+        textAlign: 'center',
+        letterSpacing: 0.5,
+    },
+    sublabel: {
+        fontSize: 13,
+        color: 'rgba(255,255,255,0.75)',
+        fontWeight: '600',
+        marginTop: 6,
+        letterSpacing: 0.3,
+    },
 });

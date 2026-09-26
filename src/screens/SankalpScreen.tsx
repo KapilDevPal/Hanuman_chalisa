@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useUser } from '../context/UserContext';
 import { useT } from '../hooks/useT';
 import { Colors } from '../constants/Colors';
 import { Card } from '../components/Card';
+import { maybeRequestReview } from '../utils/review';
 
 export const SankalpScreen = () => {
     const { sankalp, startSankalp, updateSankalpProgress, resetSankalp } = useUser();
     const { T } = useT();
+
+    useEffect(() => {
+        if (sankalp.active && sankalp.duration > 0 && sankalp.daysCompleted === sankalp.duration) {
+            maybeRequestReview();
+        }
+    }, [sankalp.active, sankalp.daysCompleted, sankalp.duration]);
 
     const handleStart = (days: number) => {
         Alert.alert(

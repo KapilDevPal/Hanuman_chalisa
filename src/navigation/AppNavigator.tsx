@@ -16,12 +16,16 @@ import { PrayerGuideScreen } from '../screens/PrayerGuideScreen';
 import { LibraryScreen } from '../screens/LibraryScreen';
 import { ReaderScreen } from '../screens/ReaderScreen';
 import { AudioScreen } from '../screens/AudioScreen';
-import { TemplesScreen } from '../screens/TemplesScreen';
+import { MoreScreen } from '../screens/MoreScreen';
+import { WebViewScreen } from '../screens/WebViewScreen';
+import { NotesScreen } from '../screens/NotesScreen';
+import { NoteEditorScreen } from '../screens/NoteEditorScreen';
 import { Colors } from '../constants/Colors';
 import { useT } from '../hooks/useT';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const MoreStackNav = createStackNavigator();
 
 const HomeStack = () => {
     const { T } = useT();
@@ -83,6 +87,36 @@ const HomeStack = () => {
     );
 };
 
+const MoreStack = () => {
+    const { T } = useT();
+    return (
+        <MoreStackNav.Navigator
+            id="MoreStack"
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: Colors.primary,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                },
+                headerTintColor: Colors.white,
+                headerTitleStyle: { fontWeight: '900', fontSize: 18 },
+                headerTitleAlign: 'center',
+                cardStyle: { backgroundColor: Colors.background },
+            }}
+        >
+            <MoreStackNav.Screen name="MoreMain" component={MoreScreen} options={{ headerShown: false }} />
+            <MoreStackNav.Screen name="WebView" component={WebViewScreen} options={{ headerShown: false }} />
+            <MoreStackNav.Screen name="Notes" component={NotesScreen} options={{ title: T('more_notes') }} />
+            <MoreStackNav.Screen
+                name="NoteEditor"
+                component={NoteEditorScreen}
+                options={({ route }: any) => ({ title: route.params?.noteId ? T('notes_edit_title') : T('notes_new_title') })}
+            />
+        </MoreStackNav.Navigator>
+    );
+};
+
 const AppNavigator = () => {
     const { T } = useT();
     return (
@@ -103,7 +137,7 @@ const AppNavigator = () => {
                             icon = <MaterialCommunityIcons name="meditation" size={iconSize} color={iconColor} />;
                         } else if (route.name === 'Dashboard') {
                             icon = <Ionicons name={focused ? 'stats-chart' : 'stats-chart-outline'} size={iconSize} color={iconColor} />;
-                        } else if (route.name === 'Temples') {
+                        } else if (route.name === 'More') {
                             icon = <Ionicons name={focused ? 'ellipsis-horizontal-circle' : 'ellipsis-horizontal-circle-outline'} size={iconSize} color={iconColor} />;
                         }
 
@@ -124,21 +158,17 @@ const AppNavigator = () => {
                     tabBarInactiveTintColor: Colors.lightText,
                     tabBarHideOnKeyboard: true,
                     tabBarStyle: {
-                        position: 'absolute',
-                        bottom: 16,
-                        left: 16,
-                        right: 16,
-                        elevation: 8,
                         backgroundColor: Colors.white,
-                        borderRadius: 24,
-                        height: 80,
-                        borderTopWidth: 0,
-                        paddingBottom: 10,
-                        paddingTop: 10,
+                        height: 64,
+                        borderTopWidth: 1,
+                        borderTopColor: '#EADEC9',
+                        paddingBottom: 8,
+                        paddingTop: 8,
                         shadowColor: '#000',
-                        shadowOpacity: 0.08,
-                        shadowOffset: { width: 0, height: 4 },
-                        shadowRadius: 12,
+                        shadowOpacity: 0.06,
+                        shadowOffset: { width: 0, height: -2 },
+                        shadowRadius: 8,
+                        elevation: 8,
                     },
                     tabBarLabelStyle: {
                         fontSize: 11,
@@ -154,7 +184,7 @@ const AppNavigator = () => {
                 <Tab.Screen name="Chalisa" component={ChalisaScreen} options={{ tabBarLabel: T('nav_chalisa'), title: T('header_chalisa') }} />
                 <Tab.Screen name="Jaap" component={JaapScreen} options={{ tabBarLabel: T('nav_jaap'), title: T('header_jaap') }} />
                 <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ tabBarLabel: T('nav_stats'), title: T('header_stats') }} />
-                <Tab.Screen name="Temples" component={TemplesScreen} options={{ tabBarLabel: T('nav_more'), title: T('header_more'), headerShown: false }} />
+                <Tab.Screen name="More" component={MoreStack} options={{ tabBarLabel: T('nav_more'), title: T('header_more'), headerShown: false }} />
             </Tab.Navigator>
         </NavigationContainer>
     );

@@ -1,17 +1,11 @@
 {
   "expo": {
-    "name": "hanuman_chalisa",
+    "name": "Hanuman Chalisa",
     "slug": "hanuman_chalisa",
-    "version": "1.6.1",
+    "version": "1.7.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#FF9933"
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -21,7 +15,7 @@
         "backgroundColor": "#FF9933"
       },
       "package": "com.kapildevpal.hanuman_chalisa",
-      "versionCode": 14
+      "versionCode": 17
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +24,20 @@
       "eas": {
         "projectId": "814f7e8b-37e3-4e16-9048-ac3fb6606293"
       }
-    }
+    },
+    "plugins": [
+      "expo-build-properties",
+      "expo-sharing",
+      "expo-status-bar",
+      "expo-font",
+      "expo-audio",
+      "expo-asset",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Hanuman Chalisa to access your photos so you can attach them to your notes."
+        }
+      ]
+    ]
   }
 }

@@ -5,11 +5,17 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import { useUser } from '../context/UserContext';
 import { useT } from '../hooks/useT';
+import { ThemeToggle } from '../components/ThemeToggle';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { MandalaBackdrop } from '../components/MandalaBackdrop';
+import { DiyaIcon, OmBadge } from '../components/icons';
+import { openInstagramProfile, shareOnWhatsApp } from '../utils/share';
 
 // Wisdom Data
 import hindiWisdom from '../../assets/data/hi/wisdom.json';
@@ -31,68 +37,72 @@ const getQuote = (language: string) => {
 };
 
 // Quick action tile
-const QuickTile = ({ icon, label, sub, onPress, accent = false }: any) => (
-    <TouchableOpacity
-        onPress={onPress}
-        activeOpacity={0.82}
-        style={{ flex: 1 }}
-    >
-        <View
-            style={{
-                backgroundColor: '#fff',
-                borderRadius: 20,
-                padding: 14,
-                alignItems: 'center',
-                borderWidth: 1.5,
-                borderColor: accent ? Colors.primary + '40' : '#EADEC9',
-                shadowColor: '#000',
-                shadowOpacity: 0.05,
-                shadowRadius: 6,
-                shadowOffset: { width: 0, height: 2 },
-                elevation: 2,
-            }}
+const QuickTile = ({ icon, label, sub, onPress, accent = false }: any) => {
+    const { colors: theme } = useTheme();
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={0.82}
+            style={{ flex: 1 }}
         >
             <View
                 style={{
-                    backgroundColor: accent ? Colors.primary + '15' : '#FFF4E6',
-                    borderRadius: 14,
-                    padding: 10,
-                    marginBottom: 8,
+                    backgroundColor: theme.card,
+                    borderRadius: 20,
+                    padding: 14,
+                    alignItems: 'center',
+                    borderWidth: 1.5,
+                    borderColor: accent ? Colors.primary + '40' : theme.border,
+                    shadowColor: '#000',
+                    shadowOpacity: 0.05,
+                    shadowRadius: 6,
+                    shadowOffset: { width: 0, height: 2 },
+                    elevation: 2,
                 }}
             >
-                {icon}
+                <View
+                    style={{
+                        backgroundColor: accent ? Colors.primary + '15' : '#FFF4E6',
+                        borderRadius: 14,
+                        padding: 10,
+                        marginBottom: 8,
+                    }}
+                >
+                    {icon}
+                </View>
+                <Text
+                    style={{
+                        fontWeight: '800',
+                        fontSize: 11,
+                        color: theme.text,
+                        textAlign: 'center',
+                        letterSpacing: 0.2,
+                    }}
+                    numberOfLines={1}
+                >
+                    {label}
+                </Text>
+                <Text
+                    style={{
+                        fontSize: 9,
+                        color: theme.lightText,
+                        fontWeight: '600',
+                        marginTop: 2,
+                        textAlign: 'center',
+                    }}
+                    numberOfLines={1}
+                >
+                    {sub}
+                </Text>
             </View>
-            <Text
-                style={{
-                    fontWeight: '800',
-                    fontSize: 11,
-                    color: '#3A2D1B',
-                    textAlign: 'center',
-                    letterSpacing: 0.2,
-                }}
-                numberOfLines={1}
-            >
-                {label}
-            </Text>
-            <Text
-                style={{
-                    fontSize: 9,
-                    color: '#A6947D',
-                    fontWeight: '600',
-                    marginTop: 2,
-                    textAlign: 'center',
-                }}
-                numberOfLines={1}
-            >
-                {sub}
-            </Text>
-        </View>
-    </TouchableOpacity>
-);
+        </TouchableOpacity>
+    );
+};
 
 export const HomeScreen = () => {
     const navigation = useNavigation<any>();
     const { language } = useLanguage();
+    const { colors: theme } = useTheme();
     const { jaapCount, sankalp } = useUser();
     const { T } = useT();
 
@@ -119,7 +129,7 @@ export const HomeScreen = () => {
 
     return (
         <ScrollView
-            style={{ flex: 1, backgroundColor: '#FAF7F0' }}
+            style={{ flex: 1, backgroundColor: theme.background }}
             showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl
@@ -144,8 +154,11 @@ export const HomeScreen = () => {
                     paddingBottom: 28,
                     borderBottomLeftRadius: 36,
                     borderBottomRightRadius: 36,
+                    overflow: 'hidden',
                 }}
             >
+                <MandalaBackdrop size={220} style={{ position: 'absolute', top: -70, right: -70 }} />
+
                 {/* Top row */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
                     <View style={{ flex: 1 }}>
@@ -156,19 +169,23 @@ export const HomeScreen = () => {
                             {T('home_greeting_hi')}
                         </Text>
                     </View>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Settings')}
-                        style={{
-                            backgroundColor: 'rgba(255,255,255,0.18)',
-                            borderRadius: 16,
-                            padding: 10,
-                            borderWidth: 1.5,
-                            borderColor: 'rgba(255,255,255,0.3)',
-                        }}
-                        activeOpacity={0.7}
-                    >
-                        <Ionicons name="settings-outline" size={22} color="#fff" />
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <LanguageSwitcher variant="header" />
+                        <ThemeToggle variant="header" />
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Settings')}
+                            style={{
+                                backgroundColor: 'rgba(255,255,255,0.18)',
+                                borderRadius: 16,
+                                padding: 10,
+                                borderWidth: 1.5,
+                                borderColor: 'rgba(255,255,255,0.3)',
+                            }}
+                            activeOpacity={0.7}
+                        >
+                            <Ionicons name="settings-outline" size={22} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
                 {/* Stats strip */}
@@ -236,8 +253,8 @@ export const HomeScreen = () => {
                     }}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                        <View style={{ backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 8, padding: 5, marginRight: 8 }}>
-                            <Ionicons name="sunny" size={13} color="#fff" />
+                        <View style={{ backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 8, padding: 3, marginRight: 8 }}>
+                            <OmBadge size={16} color="rgba(255,255,255,0.9)" glyphColor={Colors.primary} />
                         </View>
                         <Text style={{ color: 'rgba(255,255,255,0.85)', fontSize: 10, fontWeight: '800', letterSpacing: 1, textTransform: 'uppercase' }}>
                             {T('home_daily_wisdom')}
@@ -294,7 +311,7 @@ export const HomeScreen = () => {
 
                 {/* Library section */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                    <Text style={{ fontSize: 18, fontWeight: '900', color: '#3A2D1B' }}>{T('home_library')}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '900', color: theme.text }}>{T('home_library')}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Library')} activeOpacity={0.7}>
                         <Text style={{ fontSize: 13, fontWeight: '800', color: Colors.primary }}>{T('home_view_all')}</Text>
                     </TouchableOpacity>
@@ -311,7 +328,7 @@ export const HomeScreen = () => {
                     />
                     <QuickTile
                         onPress={() => navigation.navigate('Library')}
-                        icon={<MaterialCommunityIcons name="hands-pray" size={22} color={Colors.primary} />}
+                        icon={<DiyaIcon size={24} color={Colors.primary} />}
                         label={T('home_aarti')}
                         sub={T('home_aarti_sub')}
                     />
@@ -325,7 +342,7 @@ export const HomeScreen = () => {
                     />
                     <QuickTile
                         onPress={() => navigation.navigate('PrayerGuide')}
-                        icon={<MaterialCommunityIcons name="star-face" size={22} color={Colors.primary} />}
+                        icon={<OmBadge size={22} color={Colors.primary} />}
                         label={T('home_way_to_pray')}
                         sub={T('home_way_to_pray_sub')}
                     />
@@ -363,10 +380,49 @@ export const HomeScreen = () => {
                         </View>
                     </LinearGradient>
                 </TouchableOpacity>
+
+                {/* Follow & Share */}
+                <View style={{ flexDirection: 'row', gap: 10 }}>
+                    <TouchableOpacity
+                        onPress={openInstagramProfile}
+                        activeOpacity={0.85}
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: theme.card,
+                            borderRadius: 18,
+                            paddingVertical: 14,
+                            borderWidth: 1,
+                            borderColor: theme.border,
+                        }}
+                    >
+                        <Ionicons name="logo-instagram" size={18} color="#E1306C" style={{ marginRight: 8 }} />
+                        <Text style={{ fontSize: 13, fontWeight: '800', color: theme.text }}>{T('home_follow_instagram')}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={shareOnWhatsApp}
+                        activeOpacity={0.85}
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: theme.card,
+                            borderRadius: 18,
+                            paddingVertical: 14,
+                            borderWidth: 1,
+                            borderColor: theme.border,
+                        }}
+                    >
+                        <Ionicons name="logo-whatsapp" size={18} color="#25D366" style={{ marginRight: 8 }} />
+                        <Text style={{ fontSize: 13, fontWeight: '800', color: theme.text }}>{T('home_share_whatsapp')}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            {/* Bottom nav spacer */}
-            <View style={{ height: 110 }} />
+            <View style={{ height: 24 }} />
         </ScrollView>
     );
 };

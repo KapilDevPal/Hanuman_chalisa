@@ -2,8 +2,9 @@ import 'react-native-gesture-handler';
 import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, Animated, Easing, StyleSheet, Dimensions, Image } from 'react-native';
-import * as Notifications from 'expo-notifications';
+import { Notifications } from './src/utils/notificationsCompat';
 import { LanguageProvider } from './src/context/LanguageContext';
+import { ThemeProvider } from './src/context/ThemeContext';
 import { UserProvider } from './src/context/UserContext';
 import { AudioProvider, useAudio } from './src/context/AudioContext';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -13,7 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const { width, height } = Dimensions.get('window');
 
 // ─── Animated Splash Screen ───────────────────────────────────────────────────
-function SplashScreen({ onDone }: { onDone: () => void }) {
+function SplashScreen({ onDone }) {
   // Core animations
   const logoScale  = useRef(new Animated.Value(0)).current;
   const logoOpacity = useRef(new Animated.Value(0)).current;
@@ -27,7 +28,7 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
   const ring2 = useRef(new Animated.Value(0.6)).current;
   const ring3 = useRef(new Animated.Value(0.6)).current;
 
-  const startPulse = (anim: Animated.Value, delay: number) => {
+  const startPulse = (anim, delay) => {
     Animated.loop(
       Animated.sequence([
         Animated.delay(delay),
@@ -60,7 +61,7 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
     ]).start(() => onDone());
   }, []);
 
-  const ringOpacity = (anim: Animated.Value) =>
+  const ringOpacity = (anim) =>
     anim.interpolate({ inputRange: [0.6, 1.5], outputRange: [0.35, 0] });
 
   return (
@@ -127,6 +128,7 @@ function AppContent() {
   const { playAudio, pauseAudio } = useAudio();
 
   useEffect(() => {
+    if (!Notifications) return;
     const subscription = Notifications.addNotificationResponseReceivedListener(response => {
       const actionIdentifier = response.actionIdentifier;
       if (actionIdentifier === 'PAUSE_ACTION') {
@@ -135,7 +137,7 @@ function AppContent() {
         playAudio();
       }
     });
-    return () => { subscription.remove(); };
+    return () => { subscription?.remove(); };
   }, [playAudio, pauseAudio]);
 
   return <AppNavigator />;
@@ -150,15 +152,17 @@ export default function App() {
   }, []);
 
   return (
-    <LanguageProvider>
-      <UserProvider>
-        <AudioProvider>
-          <StatusBar style="light" />
-          {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
-          <AppContent />
-        </AudioProvider>
-      </UserProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <UserProvider>
+          <AudioProvider>
+            <StatusBar style="light" />
+            {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
+            <AppContent />
+          </AudioProvider>
+        </UserProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

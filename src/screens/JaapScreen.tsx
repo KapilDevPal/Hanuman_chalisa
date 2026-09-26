@@ -5,6 +5,7 @@ import { Colors } from '../constants/Colors';
 import { SonarButton } from '../components/SonarButton';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useT } from '../hooks/useT';
+import { maybeRequestReview } from '../utils/review';
 
 const JAAP_NAMES = [
     { name: 'RAM', label: 'राम', desc: 'The Supreme' },
@@ -54,6 +55,7 @@ export const JaapScreen = () => {
         Vibration.vibrate(40);
         if ((jaapCount + 1) % target === 0) {
             Vibration.vibrate([0, 400, 150, 400]);
+            maybeRequestReview();
         }
     };
 

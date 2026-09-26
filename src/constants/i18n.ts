@@ -33,6 +33,9 @@ export const translations = {
   home_insights:        { hi: 'आध्यात्मिक विश्लेषण',  en: 'Spiritual Insights',     pa: 'ਅਧਿਆਤਮਿਕ ਵਿਸ਼ਲੇਸ਼ਣ' },
   home_way_to_pray:     { hi: 'प्रार्थना विधि',        en: 'Way to Pray',            pa: 'ਪ੍ਰਾਰਥਨਾ ਵਿਧੀ' },
   home_way_to_pray_sub: { hi: 'विधि और अनुष्ठान सीखें', en: 'Learn the vidhi and rituals', pa: 'ਵਿਧੀ ਅਤੇ ਰੀਤਾਂ ਸਿੱਖੋ' },
+  home_follow_instagram: { hi: 'इंस्टाग्राम पर फॉलो करें', en: 'Follow on Instagram', pa: 'ਇੰਸਟਾਗ੍ਰਾਮ ਤੇ ਫਾਲੋ ਕਰੋ' },
+  home_share_whatsapp:   { hi: 'व्हाट्सएप पर शेयर करें', en: 'Share on WhatsApp', pa: 'ਵਟਸਐਪ ਤੇ ਸਾਂਝਾ ਕਰੋ' },
+  way_to_pray_subtitle: { hi: 'श्रद्धा और विधि से पूजा करें', en: 'A simple, step-by-step path to worship', pa: 'ਸ਼ਰਧਾ ਅਤੇ ਵਿਧੀ ਨਾਲ ਪੂਜਾ ਕਰੋ' },
 
   // ── JaapScreen ──────────────────────────────────────────────────────────────
   jaap_title:          { hi: 'दैनिक जाप',           en: 'Daily Jaap',        pa: 'ਰੋਜ਼ਾਨਾ ਜਾਪ' },
@@ -77,6 +80,10 @@ export const translations = {
   settings_chant_name:    { hi: 'जाप का नाम',            en: 'Chant Name (Jaap)',          pa: 'ਜਾਪ ਦਾ ਨਾਮ' },
   settings_chant_hint:    { hi: 'जाप के समय कौन सा नाम लेते हैं? (जैसे RAM, OM)', en: 'What name do you repeat during chanting? (e.g. RAM, OM)', pa: 'ਜਾਪ ਕਰਦੇ ਸਮੇਂ ਕਿਹੜਾ ਨਾਮ ਲੈਂਦੇ ਹੋ? (ਜਿਵੇਂ RAM, OM)' },
   settings_chant_ph:      { hi: 'नाम दर्ज करें',          en: 'Enter Chant Name',           pa: 'ਨਾਮ ਦਰਜ ਕਰੋ' },
+  settings_appearance:      { hi: 'दिखावट',                  en: 'Appearance',                 pa: 'ਦਿੱਖ' },
+  settings_dark_mode:       { hi: 'डार्क मोड',               en: 'Dark Mode',                  pa: 'ਡਾਰਕ ਮੋਡ' },
+  settings_light_mode:      { hi: 'लाइट मोड',                en: 'Light Mode',                 pa: 'ਲਾਈਟ ਮੋਡ' },
+  settings_appearance_hint: { hi: 'ऐप का रंग रूप बदलें',      en: 'Switch between light and dark theme', pa: 'ਲਾਈਟ ਅਤੇ ਡਾਰਕ ਥੀਮ ਵਿਚਕਾਰ ਬਦਲੋ' },
   settings_regional:      { hi: 'भाषा सेटिंग',            en: 'Regional Settings',          pa: 'ਭਾਸ਼ਾ ਸੈਟਿੰਗ' },
   settings_about:         { hi: 'ऐप के बारे में',          en: 'About App',                  pa: 'ਐਪ ਬਾਰੇ' },
   settings_version:       { hi: 'संस्करण',                en: 'Version',                    pa: 'ਸੰਸਕਰਣ' },
@@ -111,12 +118,44 @@ export const translations = {
   sankalp_reset_q:      { hi: 'क्या आप सुनिश्चित हैं?', en: 'Are you sure?',    pa: 'ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ?' },
   sankalp_reset_btn:    { hi: 'रीसेट',                  en: 'Reset',            pa: 'ਰੀਸੈੱਟ' },
 
-  // ── TemplesScreen ───────────────────────────────────────────────────────────
+  // ── TemplesScreen / WebViewScreen ───────────────────────────────────────────
   temples_subtitle:  { hi: 'पूजा के पवित्र स्थान', en: 'Sacred places of worship', pa: 'ਪੂਜਾ ਦੇ ਪਵਿੱਤਰ ਸਥਾਨ' },
   temples_loading:   { hi: 'मंदिर लोड हो रहे हैं...', en: 'Loading Temples...', pa: 'ਮੰਦਰ ਲੋਡ ਹੋ ਰਹੇ ਹਨ...' },
   temples_offline:   { hi: 'लोड नहीं हो सका',  en: 'Could not load',    pa: 'ਲੋਡ ਨਹੀਂ ਹੋ ਸਕਿਆ' },
   temples_net_err:   { hi: 'कृपया इंटरनेट कनेक्शन जाँचें।', en: 'Please check your internet connection and try again.', pa: 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਜਾਂਚੋ।' },
   temples_retry:     { hi: 'फिर कोशिश करें',    en: 'Try Again',         pa: 'ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ' },
+
+  // ── MoreScreen ──────────────────────────────────────────────────────────────
+  more_title:              { hi: 'और अधिक',              en: 'More',                        pa: 'ਹੋਰ' },
+  more_subtitle:           { hi: 'लिंक, संसाधन और आपकी निजी जगह', en: 'Links, resources, and your personal space', pa: 'ਲਿੰਕ, ਸਰੋਤ ਅਤੇ ਤੁਹਾਡੀ ਨਿੱਜੀ ਜਗ੍ਹਾ' },
+  more_explore_section:    { hi: 'खोजें',                 en: 'Explore',                     pa: 'ਖੋਜੋ' },
+  more_mandirpedia:        { hi: 'मंदिरपीडिया',            en: 'Mandirpedia',                 pa: 'ਮੰਦਿਰਪੀਡੀਆ' },
+  more_mandirpedia_sub:    { hi: 'मंदिरों की पूरी सूची देखें', en: 'Browse the full temple directory', pa: 'ਮੰਦਰਾਂ ਦੀ ਪੂਰੀ ਸੂਚੀ ਵੇਖੋ' },
+  more_mobile_access:      { hi: 'मोबाइल एक्सेस',          en: 'Mobile Access',               pa: 'ਮੋਬਾਈਲ ਐਕਸੈਸ' },
+  more_mobile_access_sub:  { hi: 'मंदिरपीडिया का मोबाइल अनुभव', en: "Mandirpedia's mobile experience", pa: 'ਮੰਦਿਰਪੀਡੀਆ ਦਾ ਮੋਬਾਈਲ ਅਨੁਭਵ' },
+  more_personal_section:   { hi: 'व्यक्तिगत',              en: 'Personal',                    pa: 'ਨਿੱਜੀ' },
+  more_notes:              { hi: 'मेरे नोट्स',             en: 'My Notes',                    pa: 'ਮੇਰੇ ਨੋਟਸ' },
+  more_notes_sub:          { hi: 'अपने विचार और तस्वीरें सहेजें', en: 'Save your own text and photos', pa: 'ਆਪਣੇ ਵਿਚਾਰ ਅਤੇ ਤਸਵੀਰਾਂ ਸੰਭਾਲੋ' },
+
+  // ── NotesScreen / NoteEditorScreen ──────────────────────────────────────────
+  notes_title:          { hi: 'मेरे नोट्स',          en: 'My Notes',                pa: 'ਮੇਰੇ ਨੋਟਸ' },
+  notes_subtitle:       { hi: 'आपकी निजी डायरी',     en: 'Your personal, on-device diary', pa: 'ਤੁਹਾਡੀ ਨਿੱਜੀ ਡਾਇਰੀ' },
+  notes_info_title:     { hi: 'केवल आपके डिवाइस पर सहेजा गया', en: 'Saved only on your device', pa: 'ਸਿਰਫ਼ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਤੇ ਸੰਭਾਲਿਆ ਗਿਆ' },
+  notes_info_desc:      { hi: 'यहाँ आप अपने विचार लिख सकते हैं और तस्वीरें जोड़ सकते हैं। सब कुछ स्थानीय रूप से सहेजा जाता है, कहीं भी अपलोड नहीं होता, और केवल आप ही इसे देख सकते हैं।', en: 'Write your own text and attach photos here. Everything is stored locally on this phone, never uploaded anywhere, and only you can see it.', pa: 'ਇੱਥੇ ਤੁਸੀਂ ਆਪਣੇ ਵਿਚਾਰ ਲਿਖ ਸਕਦੇ ਹੋ ਅਤੇ ਤਸਵੀਰਾਂ ਜੋੜ ਸਕਦੇ ਹੋ। ਸਭ ਕੁਝ ਸਥਾਨਕ ਤੌਰ ਤੇ ਸੰਭਾਲਿਆ ਜਾਂਦਾ ਹੈ।' },
+  notes_empty:          { hi: 'अभी तक कोई नोट नहीं। + बटन दबाकर पहला नोट बनाएं।', en: 'No notes yet. Tap + to create your first one.', pa: 'ਹਾਲੇ ਕੋਈ ਨੋਟ ਨਹੀਂ। + ਦਬਾ ਕੇ ਪਹਿਲਾ ਨੋਟ ਬਣਾਓ।' },
+  notes_untitled:       { hi: 'बिना शीर्षक',          en: 'Untitled',                pa: 'ਬਿਨਾਂ ਸਿਰਲੇਖ' },
+  notes_new_title:      { hi: 'नया नोट',              en: 'New Note',                pa: 'ਨਵਾਂ ਨੋਟ' },
+  notes_edit_title:     { hi: 'नोट संपादित करें',      en: 'Edit Note',               pa: 'ਨੋਟ ਸੰਪਾਦਿਤ ਕਰੋ' },
+  notes_title_ph:       { hi: 'शीर्षक',               en: 'Title',                   pa: 'ਸਿਰਲੇਖ' },
+  notes_text_ph:        { hi: 'यहाँ अपने विचार लिखें...', en: 'Write your thoughts here...', pa: 'ਇੱਥੇ ਆਪਣੇ ਵਿਚਾਰ ਲਿਖੋ...' },
+  notes_add_image:      { hi: 'फोटो जोड़ें',           en: 'Add Photo',               pa: 'ਫੋਟੋ ਜੋੜੋ' },
+  notes_save:           { hi: 'सहेजें',               en: 'Save',                    pa: 'ਸੰਭਾਲੋ' },
+  notes_saving:         { hi: 'सहेजा जा रहा है...',    en: 'Saving...',               pa: 'ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ...' },
+  notes_save_error:     { hi: 'नोट सहेजने में विफल',   en: 'Failed to save note',     pa: 'ਨੋਟ ਸੰਭਾਲਣ ਵਿੱਚ ਅਸਫਲ' },
+  notes_delete_title:   { hi: 'नोट हटाएं',            en: 'Delete Note',             pa: 'ਨੋਟ ਹਟਾਓ' },
+  notes_delete_q:       { hi: 'क्या आप सुनिश्चित हैं? यह क्रिया पूर्ववत नहीं की जा सकती।', en: 'Are you sure? This cannot be undone.', pa: 'ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ? ਇਹ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।' },
+  notes_permission_title: { hi: 'अनुमति आवश्यक',       en: 'Permission Needed',       pa: 'ਇਜਾਜ਼ਤ ਲੋੜੀਂਦੀ ਹੈ' },
+  notes_permission_desc:  { hi: 'फोटो जोड़ने के लिए गैलरी एक्सेस की अनुमति दें।', en: 'Please allow access to your photo gallery to add an image.', pa: 'ਫੋਟੋ ਜੋੜਨ ਲਈ ਗੈਲਰੀ ਐਕਸੈਸ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ।' },
 
   // ── Stack headers ────────────────────────────────────────────────────────────
   header_settings:    { hi: 'सेटिंग',            en: 'App Settings',      pa: 'ਸੈਟਿੰਗ' },

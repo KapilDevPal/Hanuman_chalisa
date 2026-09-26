@@ -1,22 +1,26 @@
-import * as Notifications from 'expo-notifications';
+import type * as NotificationsTypes from 'expo-notifications';
 import { Platform } from 'react-native';
+import { Notifications } from './notificationsCompat';
 
-Notifications.setNotificationHandler({
-    handleNotification: async (notification) => {
-        // If it's a playback control notification, don't show an alert, play sound, or show banner
-        const isPlayback = notification.request.identifier === 'hanuman-chalisa-playback';
-        return {
-            shouldShowAlert: !isPlayback,
-            shouldPlaySound: !isPlayback,
-            shouldSetBadge: false,
-            shouldShowBanner: !isPlayback,
-            shouldShowList: true,
-        };
-    },
-});
+if (Notifications) {
+    Notifications.setNotificationHandler({
+        handleNotification: async (notification) => {
+            // If it's a playback control notification, don't show an alert, play sound, or show banner
+            const isPlayback = notification.request.identifier === 'hanuman-chalisa-playback';
+            return {
+                shouldShowAlert: !isPlayback,
+                shouldPlaySound: !isPlayback,
+                shouldSetBadge: false,
+                shouldShowBanner: !isPlayback,
+                shouldShowList: true,
+            };
+        },
+    });
+}
 
 // Register Notification Categories for Media Playback Controls
 export const registerMediaCategories = async () => {
+    if (!Notifications) return;
     try {
         // Category shown when media is playing: exhibits a 'Pause' button
         await Notifications.setNotificationCategoryAsync('media-playing', [
@@ -43,7 +47,7 @@ export const registerMediaCategories = async () => {
 const PLAYBACK_NOTIFICATION_ID = 'hanuman-chalisa-playback';
 
 export const showPlaybackNotification = async (isPlaying: boolean) => {
-    if (Platform.OS === 'android') return;
+    if (Platform.OS === 'android' || !Notifications) return;
     try {
         await registerMediaCategories();
 
@@ -66,7 +70,7 @@ export const showPlaybackNotification = async (isPlaying: boolean) => {
 };
 
 export const dismissPlaybackNotification = async () => {
-    if (Platform.OS === 'android') return;
+    if (Platform.OS === 'android' || !Notifications) return;
     try {
         await Notifications.dismissNotificationAsync(PLAYBACK_NOTIFICATION_ID);
     } catch (error) {
@@ -75,6 +79,7 @@ export const dismissPlaybackNotification = async () => {
 };
 
 export const scheduleDailyReminder = async () => {
+    if (!Notifications) return false;
     try {
         const { status } = await Notifications.getPermissionsAsync();
         let finalStatus = status;
@@ -97,7 +102,7 @@ export const scheduleDailyReminder = async () => {
         }
 
         // Schedule for 6:00 AM daily
-        const trigger: Notifications.CalendarTriggerInput = {
+        const trigger: NotificationsTypes.CalendarTriggerInput = {
             hour: 6,
             minute: 0,
             repeats: true,

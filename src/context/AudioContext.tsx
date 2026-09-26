@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { Audio } from 'expo-av';
+import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
+import type { AudioPlayer, AudioStatus } from 'expo-audio';
 import { showPlaybackNotification, dismissPlaybackNotification } from '../utils/notifications';
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 
@@ -24,7 +25,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [isPlaying, setIsPlaying] = useState(false);
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState(0);
-    const soundRef = useRef<Audio.Sound | null>(null);
+    const soundRef = useRef<AudioPlayer | null>(null);
     const currentTrackName = "Shree Hanuman Chalisa";
 
     // References to keep event listeners updated without resubscribing
@@ -46,10 +47,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Configure background playback mode
         const setupAudioMode = async () => {
             try {
-                await Audio.setAudioModeAsync({
-                    staysActiveInBackground: true,
-                    playsInSilentModeIOS: true,
-                    shouldRouteThroughEarpieceAndroid: false,
+                await setAudioModeAsync({
+                    shouldPlayInBackground: true,
+                    playsInSilentMode: true,
+                    shouldRouteThroughEarpiece: false,
                 });
             } catch (error) {
                 console.warn("Failed to set audio mode:", error);
@@ -82,7 +83,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
             return () => {
                 if (soundRef.current) {
-                    soundRef.current.unloadAsync();
+                    soundRef.current.remove();
                 }
                 dismissPlaybackNotification();
                 MediaSessionModule.releaseSession();
@@ -92,56 +93,50 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         return () => {
             if (soundRef.current) {
-                soundRef.current.unloadAsync();
+                soundRef.current.remove();
             }
             dismissPlaybackNotification();
         };
     }, []);
 
-    const loadAudio = async () => {
+    const loadAudio = () => {
         try {
             if (soundRef.current) {
-                await soundRef.current.unloadAsync();
+                soundRef.current.remove();
             }
 
-            const { sound: newSound, status } = await Audio.Sound.createAsync(
+            const player = createAudioPlayer(
                 require('../../assets/audio/Shree Hanuman Chalisa-(Mr-Jat.in).mp3'),
-                { shouldPlay: false }
+                { updateInterval: 500 }
             );
 
-            soundRef.current = newSound;
-
-            const initialDuration = (status.isLoaded && status.durationMillis) ? status.durationMillis : 0;
-            setDuration(initialDuration);
+            soundRef.current = player;
 
             if (Platform.OS === 'android' && MediaSessionModule) {
-                MediaSessionModule.initSession(currentTrackName, "Jai Shri Ram", initialDuration);
-                MediaSessionModule.updatePlaybackState(false, 0, initialDuration);
+                MediaSessionModule.initSession(currentTrackName, "Jai Shri Ram", 0);
+                MediaSessionModule.updatePlaybackState(false, 0, 0);
             }
 
-            newSound.setOnPlaybackStatusUpdate((status) => {
-                if (status.isLoaded) {
-                    setPosition(status.positionMillis);
-                    setDuration(status.durationMillis || 0);
-                    setIsPlaying(status.isPlaying);
+            player.addListener('playbackStatusUpdate', (status: AudioStatus) => {
+                const positionMillis = status.currentTime * 1000;
+                const durationMillis = status.duration * 1000;
 
+                setPosition(positionMillis);
+                setDuration(durationMillis);
+                setIsPlaying(status.playing);
+
+                if (Platform.OS === 'android' && MediaSessionModule) {
+                    MediaSessionModule.updatePlaybackState(status.playing, positionMillis, durationMillis);
+                }
+
+                if (status.didJustFinish) {
+                    // Reset when finished
+                    setPosition(0);
+                    setIsPlaying(false);
+                    dismissPlaybackNotification();
+                    player.seekTo(0);
                     if (Platform.OS === 'android' && MediaSessionModule) {
-                        MediaSessionModule.updatePlaybackState(
-                            status.isPlaying,
-                            status.positionMillis,
-                            status.durationMillis || 0
-                        );
-                    }
-
-                    if (status.didJustFinish) {
-                        // Reset when finished
-                        setPosition(0);
-                        setIsPlaying(false);
-                        dismissPlaybackNotification();
-                        newSound.setPositionAsync(0);
-                        if (Platform.OS === 'android' && MediaSessionModule) {
-                            MediaSessionModule.updatePlaybackState(false, 0, status.durationMillis || 0);
-                        }
+                        MediaSessionModule.updatePlaybackState(false, 0, durationMillis);
                     }
                 }
             });
@@ -153,7 +148,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const playAudio = async () => {
         if (!soundRef.current) return;
         try {
-            await soundRef.current.playAsync();
+            soundRef.current.play();
             setIsPlaying(true);
             await showPlaybackNotification(true);
             if (Platform.OS === 'android' && MediaSessionModule) {
@@ -167,7 +162,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const pauseAudio = async () => {
         if (!soundRef.current) return;
         try {
-            await soundRef.current.pauseAsync();
+            soundRef.current.pause();
             setIsPlaying(false);
             await showPlaybackNotification(false);
             if (Platform.OS === 'android' && MediaSessionModule) {
@@ -191,7 +186,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (!soundRef.current) return;
         try {
             const nextPosition = Math.min(position + 10000, duration);
-            await soundRef.current.setPositionAsync(nextPosition);
+            await soundRef.current.seekTo(nextPosition / 1000);
             setPosition(nextPosition);
             if (Platform.OS === 'android' && MediaSessionModule) {
                 MediaSessionModule.updatePlaybackState(isPlaying, nextPosition, duration);
@@ -205,7 +200,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (!soundRef.current) return;
         try {
             const prevPosition = Math.max(position - 10000, 0);
-            await soundRef.current.setPositionAsync(prevPosition);
+            await soundRef.current.seekTo(prevPosition / 1000);
             setPosition(prevPosition);
             if (Platform.OS === 'android' && MediaSessionModule) {
                 MediaSessionModule.updatePlaybackState(isPlaying, prevPosition, duration);
@@ -218,7 +213,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const seekAudio = async (millis: number) => {
         if (!soundRef.current) return;
         try {
-            await soundRef.current.setPositionAsync(millis);
+            await soundRef.current.seekTo(millis / 1000);
             setPosition(millis);
             if (Platform.OS === 'android' && MediaSessionModule) {
                 MediaSessionModule.updatePlaybackState(isPlaying, millis, duration);

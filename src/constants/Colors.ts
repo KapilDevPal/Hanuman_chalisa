@@ -1,5 +1,5 @@
 export const Colors = {
-    primary: '#FF9933', // Saffron
+    primary: '#E8710A', // Saffron (matches ThemeContext light palette)
     secondary: '#FFCC00',
     background: '#FFF5E6', // Light Saffron/Cream
     text: '#4A2C00', // Dark Brown

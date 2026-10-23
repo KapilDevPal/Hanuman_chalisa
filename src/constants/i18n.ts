@@ -36,6 +36,9 @@ export const translations = {
   home_follow_instagram: { hi: 'इंस्टाग्राम पर फॉलो करें', en: 'Follow on Instagram', pa: 'ਇੰਸਟਾਗ੍ਰਾਮ ਤੇ ਫਾਲੋ ਕਰੋ' },
   home_share_whatsapp:   { hi: 'व्हाट्सएप पर शेयर करें', en: 'Share on WhatsApp', pa: 'ਵਟਸਐਪ ਤੇ ਸਾਂਝਾ ਕਰੋ' },
   way_to_pray_subtitle: { hi: 'श्रद्धा और विधि से पूजा करें', en: 'A simple, step-by-step path to worship', pa: 'ਸ਼ਰਧਾ ਅਤੇ ਵਿਧੀ ਨਾਲ ਪੂਜਾ ਕਰੋ' },
+  home_read_chalisa:    { hi: 'हनुमान चालीसा पढ़ें',   en: 'Read Hanuman Chalisa',   pa: 'ਹਨੁਮਾਨ ਚਾਲੀਸਾ ਪੜ੍ਹੋ' },
+  home_read_chalisa_sub: { hi: '{n} भाषाओं में उपलब्ध', en: 'Available in {n} languages', pa: '{n} ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ ਉਪਲਬਧ' },
+  home_today:           { hi: 'आज',                  en: 'Today',                  pa: 'ਅੱਜ' },
 
   // ── JaapScreen ──────────────────────────────────────────────────────────────
   jaap_title:          { hi: 'दैनिक जाप',           en: 'Daily Jaap',        pa: 'ਰੋਜ਼ਾਨਾ ਜਾਪ' },
@@ -48,9 +51,20 @@ export const translations = {
   jaap_goal:           { hi: 'लक्ष्य निर्धारित करें', en: 'Set Daily Round Goal', pa: 'ਰੋਜ਼ਾਨਾ ਟੀਚਾ ਨਿਰਧਾਰਿਤ ਕਰੋ' },
   jaap_reset:          { hi: 'गिनती रीसेट करें',     en: 'Reset Counter',     pa: 'ਗਿਣਤੀ ਰੀਸੈੱਟ ਕਰੋ' },
   jaap_tap:            { hi: 'जाप करें',             en: 'Tap to Chant',      pa: 'ਜਾਪ ਕਰੋ' },
+  jaap_reset_q:        { hi: 'आज की गिनती 0 कर दें?', en: "Reset today's count to 0?", pa: 'ਅੱਜ ਦੀ ਗਿਣਤੀ 0 ਕਰ ਦਿਓ?' },
 
   // ── ChalisaScreen ───────────────────────────────────────────────────────────
   chalisa_ending:  { hi: '|| इति श्री हनुमान चालीसा समाप्त ||', en: '|| End of Hanuman Chalisa ||', pa: '|| ਹਨੁਮਾਨ ਚਾਲੀਸਾ ਸਮਾਪਤ ||' },
+  chalisa_read_in: { hi: 'चालीसा की भाषा',  en: 'Read Chalisa in', pa: 'ਚਾਲੀਸਾ ਦੀ ਭਾਸ਼ਾ' },
+  chalisa_lang_count: { hi: '{n} भाषाएँ',    en: '{n} languages',   pa: '{n} ਭਾਸ਼ਾਵਾਂ' },
+  chalisa_language: { hi: 'भाषा',            en: 'Language',        pa: 'ਭਾਸ਼ਾ' },
+  chalisa_search:  { hi: 'भाषा खोजें',        en: 'Search languages', pa: 'ਭਾਸ਼ਾ ਖੋਜੋ' },
+  chalisa_no_match: { hi: 'कोई भाषा नहीं मिली', en: 'No matching language', pa: 'ਕੋਈ ਭਾਸ਼ਾ ਨਹੀਂ ਮਿਲੀ' },
+  common_done:     { hi: 'हो गया',            en: 'Done',            pa: 'ਹੋ ਗਿਆ' },
+  chalisa_doha:    { hi: 'दोहा',              en: 'Doha',            pa: 'ਦੋਹਾ' },
+  chalisa_chaupai: { hi: 'चौपाई',             en: 'Chaupai',         pa: 'ਚੌਪਾਈ' },
+  reader_not_found: { hi: 'पाठ नहीं मिला।',    en: 'Text not found.', pa: 'ਪਾਠ ਨਹੀਂ ਮਿਲਿਆ।' },
+  wisdom_share:    { hi: 'शेयर करें',          en: 'Share',           pa: 'ਸਾਂਝਾ ਕਰੋ' },
 
   // ── LibraryScreen ───────────────────────────────────────────────────────────
   library_title:    { hi: 'दिव्य पुस्तकालय',     en: 'Divine Library',   pa: 'ਦਿਵਯ ਪੁਸਤਕਾਲਯ' },
@@ -90,12 +104,8 @@ export const translations = {
   settings_build:         { hi: 'बिल्ड',                 en: 'Build',                      pa: 'ਬਿਲਡ' },
   settings_bless:         { hi: 'जय बजरंग बली!',          en: 'Jai Bajrang Bali!',          pa: 'ਜੈ ਬਜਰੰਗ ਬਲੀ!' },
   settings_devotion:      { hi: 'भक्ति भाव से बनाया गया',  en: 'Made with devotion',         pa: 'ਭਗਤੀ ਨਾਲ ਬਣਾਇਆ' },
-  settings_hi_label:      { hi: 'हिंदी (Hindi)',           en: 'हिंदी (Hindi)',              pa: 'हिंदी (Hindi)' },
-  settings_hi_sub:        { hi: 'देवनागरी लिपि',           en: 'Traditional Hindi presentation', pa: 'ਦੇਵਨਾਗਰੀ ਲਿਪੀ' },
-  settings_en_label:      { hi: 'English (अंग्रेज़ी)',     en: 'English (English)',          pa: 'English (ਅੰਗਰੇਜ਼ੀ)' },
-  settings_en_sub:        { hi: 'रोमन लिपि में',            en: 'Latin transliterated presentation', pa: 'ਰੋਮਨ ਲਿਪੀ ਵਿੱਚ' },
-  settings_pa_label:      { hi: 'ਪੰਜਾਬੀ (Punjabi)',       en: 'ਪੰਜਾਬੀ (Punjabi)',          pa: 'ਪੰਜਾਬੀ (Punjabi)' },
-  settings_pa_sub:        { hi: 'ਗੁਰਮੁਖੀ ਲਿਪੀ',           en: 'Gurumukhi presentation',     pa: 'ਗੁਰਮੁਖੀ ਲਿਪੀ' },
+  settings_language:      { hi: 'ऐप की भाषा',            en: 'App Language',               pa: 'ਐਪ ਦੀ ਭਾਸ਼ਾ' },
+  settings_language_hint: { hi: 'मेनू और लेबल की भाषा',   en: 'Used for menus and labels',  pa: 'ਮੀਨੂ ਅਤੇ ਲੇਬਲ ਦੀ ਭਾਸ਼ਾ' },
 
   // ── SankalpScreen ───────────────────────────────────────────────────────────
   sankalp_new:          { hi: 'नया संकल्प',            en: 'New Sankalp',         pa: 'ਨਵਾਂ ਸੰਕਲਪ' },
@@ -131,8 +141,8 @@ export const translations = {
   more_explore_section:    { hi: 'खोजें',                 en: 'Explore',                     pa: 'ਖੋਜੋ' },
   more_mandirpedia:        { hi: 'मंदिरपीडिया',            en: 'Mandirpedia',                 pa: 'ਮੰਦਿਰਪੀਡੀਆ' },
   more_mandirpedia_sub:    { hi: 'मंदिरों की पूरी सूची देखें', en: 'Browse the full temple directory', pa: 'ਮੰਦਰਾਂ ਦੀ ਪੂਰੀ ਸੂਚੀ ਵੇਖੋ' },
-  more_mobile_access:      { hi: 'मोबाइल एक्सेस',          en: 'Mobile Access',               pa: 'ਮੋਬਾਈਲ ਐਕਸੈਸ' },
-  more_mobile_access_sub:  { hi: 'मंदिरपीडिया का मोबाइल अनुभव', en: "Mandirpedia's mobile experience", pa: 'ਮੰਦਿਰਪੀਡੀਆ ਦਾ ਮੋਬਾਈਲ ਅਨੁਭਵ' },
+  more_rashifal:           { hi: 'राशिफल',                en: 'Rashifal',                    pa: 'ਰਾਸ਼ੀਫਲ' },
+  more_rashifal_sub:       { hi: 'आज का राशिफल और पंचांग',  en: "Today's horoscope & panchang", pa: 'ਅੱਜ ਦਾ ਰਾਸ਼ੀਫਲ ਅਤੇ ਪੰਚਾਂਗ' },
   more_personal_section:   { hi: 'व्यक्तिगत',              en: 'Personal',                    pa: 'ਨਿੱਜੀ' },
   more_notes:              { hi: 'मेरे नोट्स',             en: 'My Notes',                    pa: 'ਮੇਰੇ ਨੋਟਸ' },
   more_notes_sub:          { hi: 'अपने विचार और तस्वीरें सहेजें', en: 'Save your own text and photos', pa: 'ਆਪਣੇ ਵਿਚਾਰ ਅਤੇ ਤਸਵੀਰਾਂ ਸੰਭਾਲੋ' },
@@ -148,6 +158,9 @@ export const translations = {
   notes_edit_title:     { hi: 'नोट संपादित करें',      en: 'Edit Note',               pa: 'ਨੋਟ ਸੰਪਾਦਿਤ ਕਰੋ' },
   notes_title_ph:       { hi: 'शीर्षक',               en: 'Title',                   pa: 'ਸਿਰਲੇਖ' },
   notes_text_ph:        { hi: 'यहाँ अपने विचार लिखें...', en: 'Write your thoughts here...', pa: 'ਇੱਥੇ ਆਪਣੇ ਵਿਚਾਰ ਲਿਖੋ...' },
+  notes_photos:         { hi: 'तस्वीरें',              en: 'Photos',                  pa: 'ਤਸਵੀਰਾਂ' },
+  notes_photo_count:    { hi: '{n} तस्वीरें',          en: '{n} photos',              pa: '{n} ਤਸਵੀਰਾਂ' },
+  notes_photos_hint:    { hi: 'फुल स्क्रीन में देखने के लिए तस्वीर पर टैप करें', en: 'Tap a photo to view it full screen', pa: 'ਪੂਰੀ ਸਕ੍ਰੀਨ ਵਿੱਚ ਵੇਖਣ ਲਈ ਤਸਵੀਰ ਤੇ ਟੈਪ ਕਰੋ' },
   notes_add_image:      { hi: 'फोटो जोड़ें',           en: 'Add Photo',               pa: 'ਫੋਟੋ ਜੋੜੋ' },
   notes_save:           { hi: 'सहेजें',               en: 'Save',                    pa: 'ਸੰਭਾਲੋ' },
   notes_saving:         { hi: 'सहेजा जा रहा है...',    en: 'Saving...',               pa: 'ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ...' },
@@ -156,6 +169,39 @@ export const translations = {
   notes_delete_q:       { hi: 'क्या आप सुनिश्चित हैं? यह क्रिया पूर्ववत नहीं की जा सकती।', en: 'Are you sure? This cannot be undone.', pa: 'ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਹੋ? ਇਹ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।' },
   notes_permission_title: { hi: 'अनुमति आवश्यक',       en: 'Permission Needed',       pa: 'ਇਜਾਜ਼ਤ ਲੋੜੀਂਦੀ ਹੈ' },
   notes_permission_desc:  { hi: 'फोटो जोड़ने के लिए गैलरी एक्सेस की अनुमति दें।', en: 'Please allow access to your photo gallery to add an image.', pa: 'ਫੋਟੋ ਜੋੜਨ ਲਈ ਗੈਲਰੀ ਐਕਸੈਸ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ।' },
+
+  notes_tab_notes:      { hi: 'नोट्स',                en: 'Notes',                   pa: 'ਨੋਟਸ' },
+  notes_tab_gallery:    { hi: 'गैलरी',                en: 'Gallery',                 pa: 'ਗੈਲਰੀ' },
+  notes_gallery_empty:  { hi: 'अभी कोई तस्वीर नहीं। किसी नोट में मंत्र की फोटो जोड़ें।', en: 'No photos yet. Add a photo of a mantra to any note.', pa: 'ਹਾਲੇ ਕੋਈ ਤਸਵੀਰ ਨਹੀਂ। ਕਿਸੇ ਨੋਟ ਵਿੱਚ ਮੰਤਰ ਦੀ ਫੋਟੋ ਜੋੜੋ।' },
+  notes_edit:           { hi: 'बदलें',                en: 'Edit',                    pa: 'ਬਦਲੋ' },
+
+  // ── HelpScreen ──────────────────────────────────────────────────────────────
+  more_help:            { hi: 'सहायता और गाइड',        en: 'Help & Guide',            pa: 'ਮਦਦ ਅਤੇ ਗਾਈਡ' },
+  more_help_sub:        { hi: 'ऐप का उपयोग कैसे करें',   en: 'Why and how to use the app', pa: 'ਐਪ ਦੀ ਵਰਤੋਂ ਕਿਵੇਂ ਕਰੀਏ' },
+  help_why:             { hi: 'क्यों',                 en: 'Why',                     pa: 'ਕਿਉਂ' },
+  help_how:             { hi: 'कैसे',                  en: 'How',                     pa: 'ਕਿਵੇਂ' },
+  help_open:            { hi: 'खोलें',                 en: 'Open',                    pa: 'ਖੋਲ੍ਹੋ' },
+
+  // ── In-app review ───────────────────────────────────────────────────────────
+  review_title:         { hi: 'क्या आपको ऐप पसंद आ रहा है?', en: 'Enjoying Hanuman Chalisa?', pa: 'ਕੀ ਤੁਹਾਨੂੰ ਐਪ ਪਸੰਦ ਆ ਰਿਹਾ ਹੈ?' },
+  review_message:       { hi: 'आपकी रेटिंग से और भक्तों को यह ऐप मिलने में मदद मिलती है। जय श्री राम!', en: 'A quick rating helps other devotees find the app. Jai Shri Ram!', pa: 'ਤੁਹਾਡੀ ਰੇਟਿੰਗ ਨਾਲ ਹੋਰ ਭਗਤਾਂ ਨੂੰ ਇਹ ਐਪ ਲੱਭਣ ਵਿੱਚ ਮਦਦ ਮਿਲਦੀ ਹੈ। ਜੈ ਸ਼੍ਰੀ ਰਾਮ!' },
+  review_rate:          { hi: 'रेटिंग दें',             en: 'Rate now',                pa: 'ਰੇਟਿੰਗ ਦਿਓ' },
+  review_later:         { hi: 'अभी नहीं',              en: 'Not now',                 pa: 'ਹੁਣੇ ਨਹੀਂ' },
+  settings_rate:        { hi: 'ऐप को रेटिंग दें',        en: 'Rate this app',           pa: 'ਐਪ ਨੂੰ ਰੇਟਿੰਗ ਦਿਓ' },
+  settings_rate_sub:    { hi: 'प्ले स्टोर पर अपनी राय लिखें', en: 'Share your feedback on the store', pa: 'ਸਟੋਰ ਤੇ ਆਪਣੀ ਰਾਇ ਲਿਖੋ' },
+
+  // ── In-app updates ──────────────────────────────────────────────────────────
+  update_title:         { hi: 'नया अपडेट उपलब्ध',       en: 'Update available',        pa: 'ਨਵਾਂ ਅੱਪਡੇਟ ਉਪਲਬਧ' },
+  update_message:       { hi: 'हनुमान चालीसा का नया संस्करण उपलब्ध है। डाउनलोड होते समय आप ऐप का उपयोग जारी रख सकते हैं।', en: 'A new version of Hanuman Chalisa is available. It downloads in the background while you keep using the app.', pa: 'ਹਨੁਮਾਨ ਚਾਲੀਸਾ ਦਾ ਨਵਾਂ ਸੰਸਕਰਣ ਉਪਲਬਧ ਹੈ। ਡਾਊਨਲੋਡ ਦੌਰਾਨ ਤੁਸੀਂ ਐਪ ਵਰਤਦੇ ਰਹਿ ਸਕਦੇ ਹੋ।' },
+  update_now:           { hi: 'अभी अपडेट करें',        en: 'Update Now',              pa: 'ਹੁਣੇ ਅੱਪਡੇਟ ਕਰੋ' },
+  update_later:         { hi: 'बाद में',               en: 'Later',                   pa: 'ਬਾਅਦ ਵਿੱਚ' },
+  update_ready_title:   { hi: 'अपडेट तैयार है',        en: 'Update ready',            pa: 'ਅੱਪਡੇਟ ਤਿਆਰ ਹੈ' },
+  update_ready_message: { hi: 'अपडेट डाउनलोड हो गया है। इंस्टॉल करने के लिए ऐप को रीस्टार्ट करें।', en: 'The update has been downloaded. Restart the app to install it.', pa: 'ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ ਹੋ ਗਿਆ ਹੈ। ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਐਪ ਰੀਸਟਾਰਟ ਕਰੋ।' },
+  update_restart:       { hi: 'अभी रीस्टार्ट करें',      en: 'Restart Now',             pa: 'ਹੁਣੇ ਰੀਸਟਾਰਟ ਕਰੋ' },
+  update_check:         { hi: 'अपडेट जाँचें',          en: 'Check for updates',       pa: 'ਅੱਪਡੇਟ ਜਾਂਚੋ' },
+  update_check_sub:     { hi: 'गूगल प्ले से नया संस्करण पाएँ', en: 'Get the latest version from Google Play', pa: 'ਗੂਗਲ ਪਲੇ ਤੋਂ ਨਵਾਂ ਸੰਸਕਰਣ ਲਓ' },
+  update_none:          { hi: 'आपके पास नवीनतम संस्करण है।', en: "You're on the latest version.", pa: 'ਤੁਹਾਡੇ ਕੋਲ ਨਵੀਨਤਮ ਸੰਸਕਰਣ ਹੈ।' },
+  update_failed:        { hi: 'अपडेट डाउनलोड नहीं हो सका। कृपया बाद में फिर कोशिश करें।', en: "The update couldn't be downloaded. Please try again later.", pa: 'ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਕੋਸ਼ਿਸ਼ ਕਰੋ।' },
 
   // ── Stack headers ────────────────────────────────────────────────────────────
   header_settings:    { hi: 'सेटिंग',            en: 'App Settings',      pa: 'ਸੈਟਿੰਗ' },

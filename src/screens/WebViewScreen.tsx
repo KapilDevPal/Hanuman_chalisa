@@ -65,18 +65,18 @@ export const WebViewScreen = () => {
         <View style={[styles.container, { paddingTop: insets.top, backgroundColor: theme.background }]}>
             <View style={[styles.header, { backgroundColor: theme.background, borderBottomColor: theme.border }]}>
                 <View style={styles.headerLeft}>
-                    <View style={[styles.iconWrap, { backgroundColor: '#FFF4E6', borderColor: '#FFD59A' }]}>
-                        <Ionicons name="globe-outline" size={20} color={Colors.primary} />
+                    <View style={[styles.iconWrap, { backgroundColor: theme.primarySoft, borderColor: theme.border }]}>
+                        <Ionicons name="globe-outline" size={20} color={theme.primary} />
                     </View>
                     <View style={{ flexShrink: 1 }}>
                         <Text style={[styles.headerTitle, { color: theme.text }]} numberOfLines={1}>{title}</Text>
                         {!!subtitle && (
-                            <Text style={[styles.headerSubtitle, { color: theme.lightText }]} numberOfLines={1}>{subtitle}</Text>
+                            <Text style={[styles.headerSubtitle, { color: theme.textMuted }]} numberOfLines={1}>{subtitle}</Text>
                         )}
                     </View>
                 </View>
-                <TouchableOpacity onPress={handleReload} style={[styles.reloadBtn, { backgroundColor: '#FFF4E6', borderColor: '#FFD59A' }]} activeOpacity={0.7}>
-                    <Ionicons name="refresh" size={20} color={Colors.primary} />
+                <TouchableOpacity onPress={handleReload} style={[styles.reloadBtn, { backgroundColor: theme.primarySoft, borderColor: theme.border }]} activeOpacity={0.7}>
+                    <Ionicons name="refresh" size={20} color={theme.primary} />
                 </TouchableOpacity>
             </View>
 
@@ -93,17 +93,17 @@ export const WebViewScreen = () => {
                         <RefreshControl
                             refreshing={refreshing}
                             onRefresh={onRefresh}
-                            tintColor={Colors.primary}
-                            colors={[Colors.primary]}
+                            tintColor={theme.primary}
+                            colors={[theme.primary]}
                         />
                     }
                 >
                     <View style={styles.errorContainer}>
-                        <View style={[styles.errorIcon, { backgroundColor: '#FFF4E6', borderColor: '#FFD59A' }]}>
-                            <Ionicons name="cloud-offline-outline" size={48} color={Colors.primary} />
+                        <View style={[styles.errorIcon, { backgroundColor: theme.primarySoft, borderColor: theme.border }]}>
+                            <Ionicons name="cloud-offline-outline" size={48} color={theme.primary} />
                         </View>
                         <Text style={[styles.errorTitle, { color: theme.text }]}>{T('temples_offline')}</Text>
-                        <Text style={[styles.errorSubtitle, { color: theme.lightText }]}>{T('temples_net_err')}</Text>
+                        <Text style={[styles.errorSubtitle, { color: theme.textMuted }]}>{T('temples_net_err')}</Text>
                         <TouchableOpacity onPress={handleReload} style={styles.retryBtn} activeOpacity={0.8}>
                             <Ionicons name="refresh" size={16} color="#fff" style={{ marginRight: 6 }} />
                             <Text style={styles.retryText}>{T('temples_retry')}</Text>
@@ -118,9 +118,9 @@ export const WebViewScreen = () => {
                         <RefreshControl
                             refreshing={refreshing}
                             onRefresh={onRefresh}
-                            tintColor={Colors.primary}
-                            colors={[Colors.primary]}
-                            progressBackgroundColor="#FFF4E6"
+                            tintColor={theme.primary}
+                            colors={[theme.primary]}
+                            progressBackgroundColor={theme.surface}
                         />
                     }
                     scrollEnabled={refreshing}
@@ -144,8 +144,8 @@ export const WebViewScreen = () => {
                         />
                         {loading && (
                             <View style={[styles.loadingOverlay, { backgroundColor: theme.background }]}>
-                                <ActivityIndicator size="large" color={Colors.primary} />
-                                <Text style={[styles.loadingText, { color: theme.lightText }]}>{T('temples_loading')}</Text>
+                                <ActivityIndicator size="large" color={theme.primary} />
+                                <Text style={[styles.loadingText, { color: theme.textMuted }]}>{T('temples_loading')}</Text>
                             </View>
                         )}
                     </View>

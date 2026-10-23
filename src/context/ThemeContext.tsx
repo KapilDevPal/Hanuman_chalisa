@@ -3,33 +3,51 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type ThemeMode = 'light' | 'dark';
 
+/** Design tokens shared by every screen. Use these instead of hardcoded colours. */
 export interface ThemePalette {
     background: string;
-    card: string;
+    surface: string;
+    /** Subtle fill for chips, inputs and icon buttons */
+    surfaceAlt: string;
     text: string;
-    lightText: string;
+    textMuted: string;
     border: string;
-    headerGradient: [string, string, string];
+    primary: string;
+    /** Tinted background behind primary-coloured icons / selected states */
+    primarySoft: string;
+    onPrimary: string;
+    danger: string;
+    success: string;
     statusBar: 'light' | 'dark';
 }
 
 const lightPalette: ThemePalette = {
-    background: '#FAF7F0',
-    card: '#FFFFFF',
-    text: '#3A2D1B',
-    lightText: '#A6947D',
-    border: '#EADEC9',
-    headerGradient: ['#FF7700', '#FF9933', '#FFB347'],
-    statusBar: 'light',
+    background: '#FAF8F5',
+    surface: '#FFFFFF',
+    surfaceAlt: '#F3EFE8',
+    text: '#1F1A14',
+    textMuted: '#7A6F62',
+    border: '#ECE6DC',
+    primary: '#E8710A',
+    primarySoft: '#FDF0E3',
+    onPrimary: '#FFFFFF',
+    danger: '#D14343',
+    success: '#2E9E5B',
+    statusBar: 'dark',
 };
 
 const darkPalette: ThemePalette = {
-    background: '#171310',
-    card: '#241E17',
-    text: '#F5EEE1',
-    lightText: '#B8A88F',
-    border: '#3A2F22',
-    headerGradient: ['#7A3B00', '#B85C00', '#FF9933'],
+    background: '#121110',
+    surface: '#1C1A17',
+    surfaceAlt: '#26231F',
+    text: '#F3EEE7',
+    textMuted: '#A39889',
+    border: '#2E2A25',
+    primary: '#FF9433',
+    primarySoft: '#3A2614',
+    onPrimary: '#1A1209',
+    danger: '#F07070',
+    success: '#4CC27F',
     statusBar: 'light',
 };
 

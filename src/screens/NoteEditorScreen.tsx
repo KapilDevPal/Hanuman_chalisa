@@ -3,10 +3,13 @@ import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert } fro
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../constants/Colors';
 import { useTheme } from '../context/ThemeContext';
 import { useT } from '../hooks/useT';
-import { getNotes, saveNote, deleteNote, persistImage, UserNote } from '../utils/notesStorage';
+import { getNotes, saveNote, deleteNote, persistImage, isPersisted, UserNote } from '../utils/notesStorage';
+import { ImageViewer } from '../components/ImageViewer';
+import { Button, SectionLabel, GUTTER } from '../components/ui';
+
+const THUMB = 96;
 
 export const NoteEditorScreen = () => {
     const navigation = useNavigation<any>();
@@ -18,10 +21,11 @@ export const NoteEditorScreen = () => {
     const [id] = useState(() => noteId || `note_${Date.now()}`);
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
-    const [imageUri, setImageUri] = useState<string | null>(null);
-    const [pendingPickedUri, setPendingPickedUri] = useState<string | null>(null);
+    // Mix of persisted file:// URIs and freshly picked (temporary) URIs until saved
+    const [images, setImages] = useState<string[]>([]);
     const [createdAt, setCreatedAt] = useState(Date.now());
     const [saving, setSaving] = useState(false);
+    const [viewerIndex, setViewerIndex] = useState<number | null>(null);
     const isEditing = !!noteId;
 
     useEffect(() => {
@@ -32,13 +36,13 @@ export const NoteEditorScreen = () => {
             if (existing) {
                 setTitle(existing.title);
                 setText(existing.text);
-                setImageUri(existing.imageUri);
+                setImages(existing.images);
                 setCreatedAt(existing.createdAt);
             }
         })();
     }, [noteId]);
 
-    const pickImage = async () => {
+    const pickImages = async () => {
         const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (!permission.granted) {
             Alert.alert(T('notes_permission_title'), T('notes_permission_desc'));
@@ -46,42 +50,42 @@ export const NoteEditorScreen = () => {
         }
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
-            quality: 0.7,
-            allowsEditing: true,
+            quality: 0.8,
+            allowsMultipleSelection: true,
+            orderedSelection: true,
         });
-        if (!result.canceled && result.assets?.[0]) {
-            setPendingPickedUri(result.assets[0].uri);
-            setImageUri(result.assets[0].uri);
+        if (!result.canceled && result.assets?.length) {
+            setImages(prev => [...prev, ...result.assets.map(a => a.uri)]);
         }
     };
 
-    const removeImage = () => {
-        setImageUri(null);
-        setPendingPickedUri(null);
-    };
+    const removeImage = (uri: string) => setImages(prev => prev.filter(u => u !== uri));
 
     const handleSave = async () => {
-        if (!title.trim() && !text.trim() && !imageUri) {
+        if (!title.trim() && !text.trim() && images.length === 0) {
             navigation.goBack();
             return;
         }
         setSaving(true);
         try {
-            let finalImageUri = imageUri;
-            if (pendingPickedUri) {
-                finalImageUri = await persistImage(pendingPickedUri, id);
+            const finalImages: string[] = [];
+            for (const uri of images) {
+                const persisted = isPersisted(uri) ? uri : await persistImage(uri, id);
+                if (persisted) finalImages.push(persisted);
             }
 
             const note: UserNote = {
                 id,
                 title: title.trim(),
                 text: text.trim(),
-                imageUri: finalImageUri,
+                images: finalImages,
                 createdAt,
                 updatedAt: Date.now(),
             };
             await saveNote(note);
-            navigation.goBack();
+            // A new note opens in its gallery view; an edited one returns to it
+            if (isEditing) navigation.goBack();
+            else navigation.replace('NoteDetail', { noteId: id });
         } catch (error) {
             console.warn('Failed to save note', error);
             Alert.alert(T('notes_save_error'));
@@ -98,114 +102,95 @@ export const NoteEditorScreen = () => {
                 style: 'destructive',
                 onPress: async () => {
                     await deleteNote(id);
-                    navigation.goBack();
+                    navigation.popTo('Notes');
                 },
             },
         ]);
     };
 
     return (
-        <ScrollView
-            style={{ flex: 1, backgroundColor: theme.background }}
-            contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
-            keyboardShouldPersistTaps="handled"
-        >
-            <TextInput
-                value={title}
-                onChangeText={setTitle}
-                placeholder={T('notes_title_ph')}
-                placeholderTextColor={theme.lightText}
-                style={{
-                    fontSize: 20,
-                    fontWeight: '900',
-                    color: theme.text,
-                    marginBottom: 14,
-                    paddingBottom: 8,
-                    borderBottomWidth: 1,
-                    borderBottomColor: theme.border,
-                }}
-            />
+        <>
+            <ScrollView
+                style={{ flex: 1, backgroundColor: theme.background }}
+                contentContainerStyle={{ padding: GUTTER, paddingBottom: 60 }}
+                keyboardShouldPersistTaps="handled"
+            >
+                <TextInput
+                    value={title}
+                    onChangeText={setTitle}
+                    placeholder={T('notes_title_ph')}
+                    placeholderTextColor={theme.textMuted}
+                    style={{ fontSize: 24, fontWeight: '800', color: theme.text, paddingVertical: 8, marginBottom: 16 }}
+                />
 
-            {imageUri ? (
-                <View style={{ marginBottom: 16 }}>
-                    <Image source={{ uri: imageUri }} style={{ width: '100%', height: 200, borderRadius: 18 }} resizeMode="cover" />
+                {/* Photos */}
+                <SectionLabel>{T('notes_photos')}</SectionLabel>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={{ marginHorizontal: -GUTTER, marginBottom: 6 }}
+                    contentContainerStyle={{ paddingHorizontal: GUTTER, gap: 10 }}
+                >
+                    {images.map((uri, index) => (
+                        <TouchableOpacity key={`${uri}_${index}`} onPress={() => setViewerIndex(index)} activeOpacity={0.85}>
+                            <Image source={{ uri }} style={{ width: THUMB, height: THUMB, borderRadius: 14, backgroundColor: theme.surfaceAlt }} />
+                            <TouchableOpacity
+                                onPress={() => removeImage(uri)}
+                                hitSlop={8}
+                                accessibilityLabel="Remove photo"
+                                style={{
+                                    position: 'absolute', top: 6, right: 6, width: 24, height: 24, borderRadius: 12,
+                                    backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center',
+                                }}
+                            >
+                                <Ionicons name="close" size={16} color="#FFFFFF" />
+                            </TouchableOpacity>
+                        </TouchableOpacity>
+                    ))}
                     <TouchableOpacity
-                        onPress={removeImage}
+                        onPress={pickImages}
+                        activeOpacity={0.7}
                         style={{
-                            position: 'absolute', top: 10, right: 10,
-                            backgroundColor: 'rgba(0,0,0,0.55)', borderRadius: 16, padding: 6,
+                            width: THUMB, height: THUMB, borderRadius: 14, borderWidth: 1.5, borderStyle: 'dashed',
+                            borderColor: theme.primary + '66', backgroundColor: theme.primarySoft,
+                            alignItems: 'center', justifyContent: 'center',
                         }}
                     >
-                        <Ionicons name="trash-outline" size={18} color="#fff" />
+                        <Ionicons name="add" size={26} color={theme.primary} />
+                        <Text style={{ color: theme.primary, fontWeight: '700', fontSize: 12, marginTop: 2 }}>{T('notes_add_image')}</Text>
                     </TouchableOpacity>
-                </View>
-            ) : (
-                <TouchableOpacity
-                    onPress={pickImage}
-                    activeOpacity={0.7}
+                </ScrollView>
+                {images.length > 0 && (
+                    <Text style={{ fontSize: 13, color: theme.textMuted, marginBottom: 20 }}>{T('notes_photos_hint')}</Text>
+                )}
+                {images.length === 0 && <View style={{ height: 14 }} />}
+
+                <TextInput
+                    value={text}
+                    onChangeText={setText}
+                    placeholder={T('notes_text_ph')}
+                    placeholderTextColor={theme.textMuted}
+                    multiline
+                    textAlignVertical="top"
                     style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: theme.card,
-                        borderRadius: 18,
-                        borderWidth: 1.5,
-                        borderColor: Colors.primary + '40',
-                        borderStyle: 'dashed',
-                        paddingVertical: 22,
-                        marginBottom: 16,
+                        fontSize: 16, color: theme.text, lineHeight: 24, minHeight: 160,
+                        backgroundColor: theme.surface, borderRadius: 16, padding: 16,
+                        borderWidth: 1, borderColor: theme.border, marginBottom: 20,
                     }}
-                >
-                    <Ionicons name="image-outline" size={20} color={Colors.primary} style={{ marginRight: 8 }} />
-                    <Text style={{ color: Colors.primary, fontWeight: '800', fontSize: 13 }}>{T('notes_add_image')}</Text>
-                </TouchableOpacity>
-            )}
+                />
 
-            <TextInput
-                value={text}
-                onChangeText={setText}
-                placeholder={T('notes_text_ph')}
-                placeholderTextColor={theme.lightText}
-                multiline
-                textAlignVertical="top"
-                style={{
-                    fontSize: 14.5,
-                    color: theme.text,
-                    fontWeight: '500',
-                    lineHeight: 22,
-                    minHeight: 160,
-                    backgroundColor: theme.card,
-                    borderRadius: 18,
-                    padding: 16,
-                    borderWidth: 1,
-                    borderColor: theme.border,
-                    marginBottom: 20,
-                }}
+                <Button title={saving ? T('notes_saving') : T('notes_save')} onPress={handleSave} disabled={saving} />
+                {isEditing && (
+                    <Button title={T('notes_delete_title')} variant="danger" onPress={handleDelete} style={{ marginTop: 8 }} />
+                )}
+            </ScrollView>
+
+            <ImageViewer
+                visible={viewerIndex !== null}
+                images={images.map(uri => ({ uri, caption: title.trim() || undefined }))}
+                initialIndex={viewerIndex ?? 0}
+                onClose={() => setViewerIndex(null)}
             />
-
-            <TouchableOpacity
-                onPress={handleSave}
-                disabled={saving}
-                activeOpacity={0.85}
-                style={{
-                    backgroundColor: Colors.primary,
-                    borderRadius: 18,
-                    paddingVertical: 15,
-                    alignItems: 'center',
-                    marginBottom: isEditing ? 12 : 0,
-                    opacity: saving ? 0.7 : 1,
-                }}
-            >
-                <Text style={{ color: '#fff', fontWeight: '900', fontSize: 15 }}>
-                    {saving ? T('notes_saving') : T('notes_save')}
-                </Text>
-            </TouchableOpacity>
-
-            {isEditing && (
-                <TouchableOpacity onPress={handleDelete} activeOpacity={0.7} style={{ alignItems: 'center', padding: 8 }}>
-                    <Text style={{ color: Colors.accent, fontWeight: '800', fontSize: 13 }}>{T('notes_delete_title')}</Text>
-                </TouchableOpacity>
-            )}
-        </ScrollView>
+        </>
     );
 };

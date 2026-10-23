@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { createStackNavigator, StackNavigationOptions, TransitionPresets } from '@react-navigation/stack';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { HomeScreen } from '../screens/HomeScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { ChalisaScreen } from '../screens/ChalisaScreen';
+import { ChalisaLanguageScreen } from '../screens/ChalisaLanguageScreen';
 import { JaapScreen } from '../screens/JaapScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { SankalpScreen } from '../screens/SankalpScreen';
@@ -20,46 +21,36 @@ import { MoreScreen } from '../screens/MoreScreen';
 import { WebViewScreen } from '../screens/WebViewScreen';
 import { NotesScreen } from '../screens/NotesScreen';
 import { NoteEditorScreen } from '../screens/NoteEditorScreen';
-import { Colors } from '../constants/Colors';
+import { NoteDetailScreen } from '../screens/NoteDetailScreen';
+import { HelpScreen } from '../screens/HelpScreen';
+import { useTheme } from '../context/ThemeContext';
 import { useT } from '../hooks/useT';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const MoreStackNav = createStackNavigator();
+const ChalisaStackNav = createStackNavigator();
+
+/** Flat header that blends into the page background. */
+const useStackOptions = (): StackNavigationOptions => {
+    const { colors } = useTheme();
+    return {
+        headerStyle: { backgroundColor: colors.background },
+        headerShadowVisible: false,
+        headerTintColor: colors.text,
+        headerTitleStyle: { fontWeight: '700', fontSize: 18 },
+        cardStyle: { backgroundColor: colors.background },
+    };
+};
 
 const HomeStack = () => {
     const { T } = useT();
+    const { colors } = useTheme();
+    const screenOptions = useStackOptions();
     return (
-        <Stack.Navigator
-            id="HomeStack"
-            screenOptions={{
-                headerStyle: {
-                    backgroundColor: Colors.primary,
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                headerTintColor: Colors.white,
-                headerTitleStyle: {
-                    fontWeight: '900',
-                    fontSize: 20,
-                    letterSpacing: 0.5,
-                },
-                headerTitleAlign: 'center',
-                cardStyle: { backgroundColor: Colors.background },
-            }}
-        >
+        <Stack.Navigator id="HomeStack" screenOptions={screenOptions}>
             <Stack.Screen name="HomeMain" component={HomeScreen} options={{ headerShown: false }} />
-            <Stack.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{
-                    title: T('header_settings'),
-                    headerStyle: { backgroundColor: Colors.background },
-                    headerTintColor: Colors.text,
-                    headerTitleStyle: { color: Colors.text, fontWeight: '900' },
-                }}
-            />
+            <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: T('settings_title') }} />
             <Stack.Screen name="Sankalp" component={SankalpScreen} options={{ title: T('header_sankalp') }} />
             <Stack.Screen name="Wisdom" component={WisdomScreen} options={{ title: T('header_wisdom') }} />
             <Stack.Screen name="PrayerGuide" component={PrayerGuideScreen} options={{ title: T('header_prayer') }} />
@@ -69,45 +60,63 @@ const HomeStack = () => {
                 name="Audio"
                 component={AudioScreen}
                 options={{
-                    headerShown: true,
                     title: '',
                     headerTransparent: true,
-                    headerTintColor: '#FFF',
                     headerLeft: (props) => (
                         <TouchableOpacity
                             onPress={props.onPress}
-                            className="ml-4 bg-black/20 p-2 rounded-full"
+                            accessibilityLabel="Close player"
+                            style={{
+                                marginLeft: 16, width: 40, height: 40, borderRadius: 20,
+                                backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center',
+                            }}
                         >
-                            <Ionicons name="chevron-down" size={28} color="white" />
+                            <Ionicons name="chevron-down" size={22} color={colors.text} />
                         </TouchableOpacity>
-                    )
+                    ),
                 }}
             />
         </Stack.Navigator>
     );
 };
 
+const ChalisaStack = () => {
+    const { T } = useT();
+    const { colors } = useTheme();
+    const screenOptions = useStackOptions();
+    return (
+        <ChalisaStackNav.Navigator id="ChalisaStack" screenOptions={screenOptions}>
+            <ChalisaStackNav.Screen name="ChalisaMain" component={ChalisaScreen} options={{ headerShown: false }} />
+            <ChalisaStackNav.Screen
+                name="ChalisaLanguage"
+                component={ChalisaLanguageScreen}
+                options={({ navigation }) => ({
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    title: T('chalisa_language'),
+                    headerTitleAlign: 'center',
+                    headerLeft: () => null,
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={10} style={{ marginRight: 16 }}>
+                            <Text style={{ fontSize: 17, fontWeight: '600', color: colors.primary }}>{T('common_done')}</Text>
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+        </ChalisaStackNav.Navigator>
+    );
+};
+
 const MoreStack = () => {
     const { T } = useT();
+    const screenOptions = useStackOptions();
     return (
-        <MoreStackNav.Navigator
-            id="MoreStack"
-            screenOptions={{
-                headerStyle: {
-                    backgroundColor: Colors.primary,
-                    elevation: 0,
-                    shadowOpacity: 0,
-                    borderBottomWidth: 0,
-                },
-                headerTintColor: Colors.white,
-                headerTitleStyle: { fontWeight: '900', fontSize: 18 },
-                headerTitleAlign: 'center',
-                cardStyle: { backgroundColor: Colors.background },
-            }}
-        >
+        <MoreStackNav.Navigator id="MoreStack" screenOptions={screenOptions}>
             <MoreStackNav.Screen name="MoreMain" component={MoreScreen} options={{ headerShown: false }} />
             <MoreStackNav.Screen name="WebView" component={WebViewScreen} options={{ headerShown: false }} />
+            <MoreStackNav.Screen name="MoreSettings" component={SettingsScreen} options={{ title: T('settings_title') }} />
+            <MoreStackNav.Screen name="Help" component={HelpScreen} options={{ title: T('more_help') }} />
             <MoreStackNav.Screen name="Notes" component={NotesScreen} options={{ title: T('more_notes') }} />
+            <MoreStackNav.Screen name="NoteDetail" component={NoteDetailScreen} />
             <MoreStackNav.Screen
                 name="NoteEditor"
                 component={NoteEditorScreen}
@@ -117,74 +126,70 @@ const MoreStack = () => {
     );
 };
 
+type IconName = React.ComponentProps<typeof Ionicons>['name'];
+const TAB_ICONS: Record<string, [IconName, IconName]> = {
+    Home: ['home', 'home-outline'],
+    Chalisa: ['book', 'book-outline'],
+    Dashboard: ['stats-chart', 'stats-chart-outline'],
+    More: ['grid', 'grid-outline'],
+};
+
 const AppNavigator = () => {
     const { T } = useT();
+    const { colors, isDark } = useTheme();
+    const base = isDark ? DarkTheme : DefaultTheme;
+    const navTheme = {
+        ...base,
+        colors: {
+            ...base.colors,
+            primary: colors.primary,
+            background: colors.background,
+            card: colors.surface,
+            text: colors.text,
+            border: colors.border,
+        },
+    };
+
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={navTheme}>
             <Tab.Navigator
                 id="MainTabs"
                 screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
-                        let icon;
-                        const iconColor = focused ? Colors.primary : Colors.lightText;
-                        const iconSize = focused ? size + 1 : size;
-
-                        if (route.name === 'Home') {
-                            icon = <Ionicons name={focused ? 'home' : 'home-outline'} size={iconSize} color={iconColor} />;
-                        } else if (route.name === 'Chalisa') {
-                            icon = <FontAwesome5 name="book-open" size={iconSize - 4} color={iconColor} />;
-                        } else if (route.name === 'Jaap') {
-                            icon = <MaterialCommunityIcons name="meditation" size={iconSize} color={iconColor} />;
-                        } else if (route.name === 'Dashboard') {
-                            icon = <Ionicons name={focused ? 'stats-chart' : 'stats-chart-outline'} size={iconSize} color={iconColor} />;
-                        } else if (route.name === 'More') {
-                            icon = <Ionicons name={focused ? 'ellipsis-horizontal-circle' : 'ellipsis-horizontal-circle-outline'} size={iconSize} color={iconColor} />;
-                        }
-
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => {
+                        const color = focused ? colors.primary : colors.textMuted;
+                        const icon = route.name === 'Jaap'
+                            ? <MaterialCommunityIcons name="meditation" size={24} color={color} />
+                            : <Ionicons name={TAB_ICONS[route.name][focused ? 0 : 1]} size={22} color={color} />;
                         return (
                             <View style={{
-                                width: 52,
-                                height: 30,
-                                backgroundColor: focused ? 'rgba(255, 153, 51, 0.12)' : 'transparent',
-                                borderRadius: 15,
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                                width: 56, height: 30, borderRadius: 15,
+                                backgroundColor: focused ? colors.primarySoft : 'transparent',
+                                alignItems: 'center', justifyContent: 'center',
                             }}>
                                 {icon}
                             </View>
                         );
                     },
-                    tabBarActiveTintColor: Colors.primary,
-                    tabBarInactiveTintColor: Colors.lightText,
+                    tabBarActiveTintColor: colors.primary,
+                    tabBarInactiveTintColor: colors.textMuted,
                     tabBarHideOnKeyboard: true,
                     tabBarStyle: {
-                        backgroundColor: Colors.white,
-                        height: 64,
+                        backgroundColor: colors.surface,
                         borderTopWidth: 1,
-                        borderTopColor: '#EADEC9',
-                        paddingBottom: 8,
-                        paddingTop: 8,
-                        shadowColor: '#000',
-                        shadowOpacity: 0.06,
-                        shadowOffset: { width: 0, height: -2 },
-                        shadowRadius: 8,
-                        elevation: 8,
+                        borderTopColor: colors.border,
+                        elevation: 0,
+                        shadowOpacity: 0,
+                        paddingTop: 6,
                     },
-                    tabBarLabelStyle: {
-                        fontSize: 11,
-                        fontWeight: '700',
-                        letterSpacing: 0.2,
-                    },
-                    headerStyle: { backgroundColor: Colors.primary },
-                    headerTintColor: Colors.white,
-                    headerTitleStyle: { fontWeight: 'bold' }
+                    tabBarLabelStyle: { fontSize: 12, fontWeight: '600', marginTop: 2 },
                 })}
             >
-                <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false, tabBarLabel: T('nav_home') }} />
-                <Tab.Screen name="Chalisa" component={ChalisaScreen} options={{ tabBarLabel: T('nav_chalisa'), title: T('header_chalisa') }} />
-                <Tab.Screen name="Jaap" component={JaapScreen} options={{ tabBarLabel: T('nav_jaap'), title: T('header_jaap') }} />
-                <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ tabBarLabel: T('nav_stats'), title: T('header_stats') }} />
-                <Tab.Screen name="More" component={MoreStack} options={{ tabBarLabel: T('nav_more'), title: T('header_more'), headerShown: false }} />
+                <Tab.Screen name="Home" component={HomeStack} options={{ tabBarLabel: T('nav_home') }} />
+                <Tab.Screen name="Chalisa" component={ChalisaStack} options={{ tabBarLabel: T('nav_chalisa') }} />
+                <Tab.Screen name="Jaap" component={JaapScreen} options={{ tabBarLabel: T('nav_jaap') }} />
+                <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ tabBarLabel: T('nav_stats') }} />
+                <Tab.Screen name="More" component={MoreStack} options={{ tabBarLabel: T('nav_more') }} />
             </Tab.Navigator>
         </NavigationContainer>
     );

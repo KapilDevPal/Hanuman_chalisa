@@ -10,13 +10,13 @@ interface LanguageContextProps {
 }
 
 const LanguageContext = createContext<LanguageContextProps>({
-    language: 'hi',
+    language: 'en',
     setLanguage: () => { },
     isLoading: true,
 });
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [language, setLanguageState] = useState<Language>('hi');
+    const [language, setLanguageState] = useState<Language>('en');
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

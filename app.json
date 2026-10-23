@@ -2,12 +2,20 @@
   "expo": {
     "name": "Hanuman Chalisa",
     "slug": "hanuman_chalisa",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kapildevpal.hanumanchalisa",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "LSApplicationQueriesSchemes": [
+          "whatsapp"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -15,7 +23,7 @@
         "backgroundColor": "#FF9933"
       },
       "package": "com.kapildevpal.hanuman_chalisa",
-      "versionCode": 17
+      "versionCode": 18
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,6 +44,15 @@
         "expo-image-picker",
         {
           "photosPermission": "Allow Hanuman Chalisa to access your photos so you can attach them to your notes."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#FAF8F5"
         }
       ]
     ]

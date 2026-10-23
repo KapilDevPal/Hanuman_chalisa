@@ -5,10 +5,14 @@ export interface UserNote {
     id: string;
     title: string;
     text: string;
-    imageUri: string | null;
+    /** Persistent file:// URIs, in display order */
+    images: string[];
     createdAt: number;
     updatedAt: number;
 }
+
+/** Shape written by older app versions (single image per note). */
+type StoredNote = Omit<UserNote, 'images'> & { images?: string[]; imageUri?: string | null };
 
 const NOTES_KEY = 'user_notes';
 const IMAGES_DIR_NAME = 'user_notes_images';
@@ -21,12 +25,17 @@ const getImagesDir = (): Directory => {
     return dir;
 };
 
+const normalize = ({ imageUri, images, ...rest }: StoredNote): UserNote => ({
+    ...rest,
+    images: images ?? (imageUri ? [imageUri] : []),
+});
+
 export async function getNotes(): Promise<UserNote[]> {
     try {
         const raw = await AsyncStorage.getItem(NOTES_KEY);
         if (!raw) return [];
-        const notes: UserNote[] = JSON.parse(raw);
-        return notes.sort((a, b) => b.updatedAt - a.updatedAt);
+        const notes: StoredNote[] = JSON.parse(raw);
+        return notes.map(normalize).sort((a, b) => b.updatedAt - a.updatedAt);
     } catch (error) {
         console.warn('Failed to load notes', error);
         return [];
@@ -35,6 +44,11 @@ export async function getNotes(): Promise<UserNote[]> {
 
 async function saveNotes(notes: UserNote[]): Promise<void> {
     await AsyncStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+}
+
+/** True when the URI already lives in this app's persistent notes folder. */
+export function isPersisted(uri: string): boolean {
+    return uri.startsWith(getImagesDir().uri);
 }
 
 /**
@@ -46,10 +60,8 @@ export async function persistImage(pickedUri: string, noteId: string): Promise<s
     try {
         const dir = getImagesDir();
         const extension = pickedUri.split('.').pop()?.split('?')[0] || 'jpg';
-        const destFile = new File(dir, `${noteId}.${extension}`);
-        if (destFile.exists) {
-            destFile.delete();
-        }
+        const uniqueSuffix = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const destFile = new File(dir, `${noteId}_${uniqueSuffix}.${extension}`);
         const sourceFile = new File(pickedUri);
         await sourceFile.copy(destFile);
         return destFile.uri;
@@ -59,15 +71,16 @@ export async function persistImage(pickedUri: string, noteId: string): Promise<s
     }
 }
 
-function deleteImageIfAny(imageUri: string | null) {
-    if (!imageUri) return;
-    try {
-        const file = new File(imageUri);
-        if (file.exists) {
-            file.delete();
+function deleteImages(uris: string[]) {
+    for (const uri of uris) {
+        try {
+            const file = new File(uri);
+            if (file.exists) {
+                file.delete();
+            }
+        } catch (error) {
+            console.warn('Failed to delete note image', error);
         }
-    } catch (error) {
-        console.warn('Failed to delete note image', error);
     }
 }
 
@@ -75,6 +88,8 @@ export async function saveNote(note: UserNote): Promise<void> {
     const notes = await getNotes();
     const existingIndex = notes.findIndex(n => n.id === note.id);
     if (existingIndex >= 0) {
+        // Remove files for photos the user took out of this note
+        deleteImages(notes[existingIndex].images.filter(uri => !note.images.includes(uri)));
         notes[existingIndex] = note;
     } else {
         notes.push(note);
@@ -86,7 +101,7 @@ export async function deleteNote(id: string): Promise<void> {
     const notes = await getNotes();
     const target = notes.find(n => n.id === id);
     if (target) {
-        deleteImageIfAny(target.imageUri);
+        deleteImages(target.images);
     }
     await saveNotes(notes.filter(n => n.id !== id));
 }

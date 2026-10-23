@@ -1,13 +1,16 @@
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity, Animated, Easing, StyleSheet } from 'react-native';
-import { Colors } from '../constants/Colors';
+import { useTheme } from '../context/ThemeContext';
 
 interface SonarButtonProps {
     onPress: () => void;
     label: string;
+    sublabel: string;
+    size?: number;
 }
 
-export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
+export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label, sublabel, size = 220 }) => {
+    const { colors } = useTheme();
     // Single ring per tap — clean, crisp animation
     const ring = useRef(new Animated.Value(0)).current;
     const buttonScale = useRef(new Animated.Value(1)).current;
@@ -22,7 +25,7 @@ export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
         ring.setValue(0);
         ringAnim.current = Animated.timing(ring, {
             toValue: 1,
-            duration: 700,
+            duration: 650,
             easing: Easing.out(Easing.cubic),
             useNativeDriver: true,
         });
@@ -33,7 +36,7 @@ export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
 
     const handlePressIn = () => {
         Animated.spring(buttonScale, {
-            toValue: 0.92,
+            toValue: 0.94,
             useNativeDriver: true,
             friction: 8,
             tension: 100,
@@ -51,40 +54,28 @@ export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
         onPress();
     };
 
-    const ringScale = ring.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 2.2],
-    });
-    const ringOpacity = ring.interpolate({
-        inputRange: [0, 0.4, 1],
-        outputRange: [0.55, 0.2, 0],
-    });
+    const ringScale = ring.interpolate({ inputRange: [0, 1], outputRange: [1, 1.6] });
+    const ringOpacity = ring.interpolate({ inputRange: [0, 0.4, 1], outputRange: [0.35, 0.15, 0] });
+    const circle = { width: size, height: size, borderRadius: size / 2 };
 
     return (
         <View style={styles.container}>
-            {/* Single wave ring */}
             <Animated.View
-                style={[
-                    styles.ring,
-                    {
-                        transform: [{ scale: ringScale }],
-                        opacity: ringOpacity,
-                    },
-                ]}
+                style={[styles.ring, circle, { backgroundColor: colors.primary, transform: [{ scale: ringScale }], opacity: ringOpacity }]}
             />
-
-            {/* Main Button */}
             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
                 <TouchableOpacity
                     activeOpacity={1}
                     onPressIn={handlePressIn}
                     onPressOut={handlePressOut}
-                    style={styles.button}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${sublabel}: ${label}`}
+                    style={[styles.button, circle, { backgroundColor: colors.primary }]}
                 >
-                    <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>
+                    <Text style={[styles.label, { color: colors.onPrimary }]} adjustsFontSizeToFit numberOfLines={1}>
                         {label}
                     </Text>
-                    <Text style={styles.sublabel}>Tap to Chant</Text>
+                    <Text style={[styles.sublabel, { color: colors.onPrimary }]}>{sublabel}</Text>
                 </TouchableOpacity>
             </Animated.View>
         </View>
@@ -93,47 +84,27 @@ export const SonarButton: React.FC<SonarButtonProps> = ({ onPress, label }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingVertical: 48,
     },
     ring: {
         position: 'absolute',
-        width: 224,
-        height: 224,
-        borderRadius: 112,
-        backgroundColor: Colors.primary,
-        borderWidth: 0,
     },
     button: {
-        width: 224,
-        height: 224,
-        borderRadius: 112,
-        backgroundColor: Colors.primary,
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 14,
-        shadowColor: Colors.primary,
-        shadowOpacity: 0.45,
-        shadowRadius: 18,
-        shadowOffset: { width: 0, height: 6 },
-        // Inner highlight border
-        borderWidth: 3,
-        borderColor: 'rgba(255, 218, 140, 0.35)',
-        paddingHorizontal: 20,
+        paddingHorizontal: 24,
     },
     label: {
-        fontSize: 44,
-        fontWeight: '900',
-        color: '#fff',
+        fontSize: 40,
+        fontWeight: '800',
         textAlign: 'center',
-        letterSpacing: 0.5,
     },
     sublabel: {
-        fontSize: 13,
-        color: 'rgba(255,255,255,0.75)',
+        fontSize: 14,
         fontWeight: '600',
+        opacity: 0.8,
         marginTop: 6,
-        letterSpacing: 0.3,
     },
 });

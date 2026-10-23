@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { toLocalDateKey } from '../utils/date';
 
 interface DailyJaap {
     date: string; // YYYY-MM-DD
@@ -57,7 +58,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loadUserData();
     }, []);
 
-    const getTodayDate = () => new Date().toISOString().split('T')[0];
+    const getTodayDate = () => toLocalDateKey();
 
     const loadUserData = async () => {
         try {

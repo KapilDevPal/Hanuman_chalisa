@@ -54,6 +54,12 @@ export const MoreScreen = () => {
                     onPress={() => navigation.navigate('Help')}
                 />
                 <ListRow
+                    icon={<IconTile><Ionicons name="shield-checkmark-outline" size={20} color={colors.primary} /></IconTile>}
+                    title={T('more_privacy')}
+                    subtitle={T('more_privacy_sub')}
+                    onPress={() => navigation.navigate('PrivacyPolicy')}
+                />
+                <ListRow
                     icon={<IconTile><Ionicons name="settings-outline" size={20} color={colors.primary} /></IconTile>}
                     title={T('settings_title')}
                     subtitle={T('settings_subtitle')}

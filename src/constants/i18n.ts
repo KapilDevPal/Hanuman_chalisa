@@ -146,6 +146,8 @@ export const translations = {
   more_personal_section:   { hi: 'व्यक्तिगत',              en: 'Personal',                    pa: 'ਨਿੱਜੀ' },
   more_notes:              { hi: 'मेरे नोट्स',             en: 'My Notes',                    pa: 'ਮੇਰੇ ਨੋਟਸ' },
   more_notes_sub:          { hi: 'अपने विचार और तस्वीरें सहेजें', en: 'Save your own text and photos', pa: 'ਆਪਣੇ ਵਿਚਾਰ ਅਤੇ ਤਸਵੀਰਾਂ ਸੰਭਾਲੋ' },
+  more_privacy:            { hi: 'गोपनीयता नीति',           en: 'Privacy Policy',              pa: 'ਪਰਦੇਦਾਰੀ ਨੀਤੀ' },
+  more_privacy_sub:        { hi: 'जानें कि आपका डेटा कैसे संभाला जाता है', en: 'How this app handles your data', pa: 'ਇਹ ਐਪ ਤੁਹਾਡੇ ਡੇਟੇ ਨੂੰ ਕਿਵੇਂ ਸੰਭਾਲਦੀ ਹੈ' },
 
   // ── NotesScreen / NoteEditorScreen ──────────────────────────────────────────
   notes_title:          { hi: 'मेरे नोट्स',          en: 'My Notes',                pa: 'ਮੇਰੇ ਨੋਟਸ' },

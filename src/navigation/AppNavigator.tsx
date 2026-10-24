@@ -23,6 +23,7 @@ import { NotesScreen } from '../screens/NotesScreen';
 import { NoteEditorScreen } from '../screens/NoteEditorScreen';
 import { NoteDetailScreen } from '../screens/NoteDetailScreen';
 import { HelpScreen } from '../screens/HelpScreen';
+import { PrivacyPolicyScreen } from '../screens/PrivacyPolicyScreen';
 import { useTheme } from '../context/ThemeContext';
 import { useT } from '../hooks/useT';
 
@@ -115,6 +116,7 @@ const MoreStack = () => {
             <MoreStackNav.Screen name="WebView" component={WebViewScreen} options={{ headerShown: false }} />
             <MoreStackNav.Screen name="MoreSettings" component={SettingsScreen} options={{ title: T('settings_title') }} />
             <MoreStackNav.Screen name="Help" component={HelpScreen} options={{ title: T('more_help') }} />
+            <MoreStackNav.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ title: T('more_privacy') }} />
             <MoreStackNav.Screen name="Notes" component={NotesScreen} options={{ title: T('more_notes') }} />
             <MoreStackNav.Screen name="NoteDetail" component={NoteDetailScreen} />
             <MoreStackNav.Screen

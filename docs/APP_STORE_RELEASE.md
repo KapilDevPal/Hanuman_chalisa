@@ -1,5 +1,7 @@
 # Releasing Hanuman Chalisa on the Apple App Store
 
+> Verified against Apple and Expo documentation on 24 October 2026. Store rules change; re-check the official links in section 10 immediately before submission.
+
 A step-by-step guide for the first iOS release (v1.8.0) of this Expo app, using EAS Build and EAS Submit. No Mac is needed: EAS builds and signs the app in the cloud.
 
 ---
@@ -20,7 +22,7 @@ Before submitting, do one of these:
 
 | Item | Notes |
 |---|---|
-| Apple Developer Program | ₹8,700 / $99 per year, at [developer.apple.com/programs](https://developer.apple.com/programs/). Enrolling as an individual takes 1–2 days. An organisation also needs a D-U-N-S number. |
+| Apple Developer Program | Join at [developer.apple.com/programs](https://developer.apple.com/programs/). Check Apple's page for the current local price and enrolment requirements. |
 | Expo account | The same account this project already uses (`extra.eas.projectId` in `app.json`). |
 | EAS CLI | `npm install -g eas-cli`, then `eas login`. |
 | Privacy policy URL | **Required** for every app. A simple page on `hanumanchalisa.club` is enough (see section 6). |
@@ -40,9 +42,11 @@ Before submitting, do one of these:
 | Export compliance | `ITSAppUsesNonExemptEncryption: false`, so App Store Connect stops asking about encryption on every build | `app.json` → `ios.infoPlist` |
 | WhatsApp share | `LSApplicationQueriesSchemes: ["whatsapp"]`, so iOS can detect WhatsApp | `app.json` → `ios.infoPlist` |
 | Background audio | Enabled by default by the `expo-audio` plugin | `app.json` plugins |
+| Microphone access | Disabled on iOS and Android; this app plays but does not record audio | `app.json` → `expo-audio` plugin |
 | Photo permission text | "Allow Hanuman Chalisa to access your photos…" | `expo-image-picker` plugin |
 | Splash screen | Logo on `#FAF8F5` | `expo-splash-screen` plugin |
 | In-app updates | Android only; does nothing on iOS (Apple has no equivalent) | `src/services/inAppUpdates.ts` |
+| iOS build image | Expo SDK 57 image with Xcode 26.6 / iOS 26 SDK | `eas.json` → `build.production.ios.image` |
 
 > **The bundle ID is permanent.** Once an app is created in App Store Connect with `com.kapildevpal.hanumanchalisa`, it can never change. Apple doesn't allow underscores, which is why it differs from the Android package `com.kapildevpal.hanuman_chalisa`.
 
@@ -60,6 +64,10 @@ eas build:version:get -p ios        # current remote iOS build number
 eas build:version:get -p android    # current remote Android version code
 eas build:version:set -p android    # only if Play rejects a code as already used
 ```
+
+### Current Apple SDK requirement
+
+Apple currently requires iOS uploads to be built with Xcode 26 or later. Expo SDK 57's pinned `sdk-57` image uses Xcode 26.6, so this project meets that requirement. Do not change the production image to `latest` without checking Expo's SDK compatibility notes.
 
 ---
 
@@ -212,14 +220,18 @@ Suggested order:
 
 Under **App Privacy** → **Get Started**:
 
-- **Do you or your third-party partners collect data from this app?** → **No, we do not collect data from this app.**
+- First audit `mandirpedia.com` as described below.
+- If neither the native app nor the embedded site collects data under Apple's definitions, choose **No, we do not collect data from this app**.
+- If the site or any third-party code collects data, choose **Yes** and declare every applicable data type, purpose, identity-linking, and tracking practice.
 
-This matches how the app works:
+For the native features:
 - Notes, photos, jaap counts and settings are stored only on the device (AsyncStorage and the app's document folder).
 - There's no account, analytics or ads.
-- The More → Mandirpedia and Rashifal screens open your own website in a web view. If that website uses analytics or cookies, describe them in your privacy policy.
+- The native app does not request microphone access.
 
-The **privacy policy URL** is still required. It can say exactly the points above: no data collected, everything stored on the device, and local notifications used only for the daily reminder.
+The **privacy policy URL** is still required, and Apple also requires the policy to be easily accessible inside the app. The app now has **More → Privacy Policy**. Publish the completed [`PRIVACY_POLICY_TEMPLATE.md`](./PRIVACY_POLICY_TEMPLATE.md) at a stable public HTTPS URL and enter that URL in App Store Connect.
+
+**Do not select “No data collected” until the website has been audited.** The Explore pages load `mandirpedia.com` inside a web view. If that site uses analytics, advertising, cookies, forms, or other tracking, those practices can affect both the privacy policy and App Store privacy answers. Either disclose every applicable data type accurately or remove/open the Explore pages outside the app before submission.
 
 ---
 
@@ -265,7 +277,7 @@ Check these on a real iPhone before submitting:
 3. **Version release:** choose *Manually release this version* for the first release, so you control the launch day.
 4. Click **Add for Review** → **Submit to App Review**.
 
-Review usually takes 24–48 hours.
+Review time varies. Watch the status and messages in App Store Connect rather than planning around a fixed review duration.
 
 ### Common rejection reasons for an app like this
 
@@ -277,6 +289,34 @@ Review usually takes 24–48 hours.
 | **5.1.1 Privacy** | Missing or broken privacy policy URL | Make sure the URL loads |
 | **2.1 Performance** | Crashes or empty screens during review | Run through the TestFlight checklist |
 | **4.2 Minimum functionality** | App looks like a website wrapper | The Mandirpedia/Rashifal web views are extras, not the core; keep them that way |
+
+---
+
+## 9. Final release commands
+
+Run these from the project root:
+
+```bash
+npm run release:check
+npm run build:ios
+npm run submit:ios
+```
+
+`release:check` needs internet access because `expo-doctor` may be downloaded by `npx`. The submit command requires the App Store Connect app record to exist. If EAS cannot match it automatically, add its numeric Apple ID as `submit.production.ios.ascAppId` in `eas.json` as shown in section 5.1.
+
+Never commit an App Store Connect API private key (`.p8`), Apple password, or EAS access token. Use EAS credentials or secret environment variables.
+
+---
+
+## 10. Official references
+
+- [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
+- [Apple: Manage app privacy](https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/)
+- [Apple screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)
+- [Apple: Upload builds](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds)
+- [Expo: App version management](https://docs.expo.dev/build-reference/app-versions/)
+- [Expo: EAS Build infrastructure](https://docs.expo.dev/build-reference/infrastructure/)
+- [Expo Audio configuration](https://docs.expo.dev/versions/latest/sdk/audio/)
 
 If you're rejected, reply in **Resolution Center**. Small fixes are often accepted with just an explanation; otherwise make a new build and submit again.
 

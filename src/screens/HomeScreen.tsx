@@ -105,9 +105,9 @@ export const HomeScreen = () => {
                 </View>
             </View>
 
-            {/* ── Audio ────────────────────────────────────────────────────── */}
+            {/* ── Hero: read Chalisa ───────────────────────────────────────── */}
             <TouchableOpacity
-                onPress={() => navigation.navigate('Audio')}
+                onPress={() => navigation.navigate('Chalisa')}
                 activeOpacity={0.9}
                 style={{ marginBottom: 12, borderRadius: RADIUS + 4, overflow: 'hidden', height: 240 }}
             >
@@ -122,13 +122,13 @@ export const HomeScreen = () => {
                     >
                         <View style={{ flex: 1 }}>
                             <Text style={{ fontSize: 13, fontWeight: '600', color: 'rgba(255,255,255,0.8)', letterSpacing: 0.5 }}>
-                                {T('home_listen_now')}
+                                {T('home_read_now')}
                             </Text>
                             <Text style={{ fontSize: 22, fontWeight: '800', color: '#FFFFFF', marginTop: 2 }}>Hanuman Chalisa</Text>
-                            <Text style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>{T('home_divine_chanting')}</Text>
+                            <Text style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>{T('home_read_chalisa_sub', { n: CHALISA_LANGUAGES.length })}</Text>
                         </View>
                         <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }}>
-                            <Ionicons name="play" size={26} color={colors.onPrimary} style={{ marginLeft: 3 }} />
+                            <Ionicons name="book-outline" size={24} color={colors.onPrimary} />
                         </View>
                     </LinearGradient>
                 </ImageBackground>

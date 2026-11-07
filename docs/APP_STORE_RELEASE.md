@@ -6,15 +6,9 @@ A step-by-step guide for the first iOS release (v1.8.0) of this Expo app, using 
 
 ---
 
-## 0. Fix before you submit: the audio file
+## 0. Audio removed
 
-The bundled recording is `assets/audio/Shree Hanuman Chalisa-(Mr-Jat.in).mp3`, downloaded from a music site. Apple rejects apps that ship copyrighted recordings without permission (Guideline 5.2, Intellectual Property), and the same risk applies on Google Play.
-
-Before submitting, do one of these:
-
-- Replace it with a recording you own, or one that is clearly royalty-free or public domain, and keep the licence.
-- Get written permission from the rights holder.
-- Remove the audio feature from the iOS release.
+The app used to bundle a Chalisa recording downloaded from a music site. To avoid an App Store rejection under Guideline 5.2 (Intellectual Property), the audio player, the recording and the `expo-audio` package were removed in November 2026, on both iOS and Android. Add audio back only with a recording you own or have a written licence for.
 
 ---
 
@@ -41,8 +35,7 @@ Before submitting, do one of these:
 | Bundle ID | `com.kapildevpal.hanumanchalisa` | `app.json` → `expo.ios.bundleIdentifier` |
 | Export compliance | `ITSAppUsesNonExemptEncryption: false`, so App Store Connect stops asking about encryption on every build | `app.json` → `ios.infoPlist` |
 | WhatsApp share | `LSApplicationQueriesSchemes: ["whatsapp"]`, so iOS can detect WhatsApp | `app.json` → `ios.infoPlist` |
-| Background audio | Enabled by default by the `expo-audio` plugin | `app.json` plugins |
-| Microphone access | Disabled on iOS and Android; this app plays but does not record audio | `app.json` → `expo-audio` plugin |
+| Microphone access | Not used; `RECORD_AUDIO` is blocked on Android | `app.json` → `android.blockedPermissions` |
 | Photo permission text | "Allow Hanuman Chalisa to access your photos…" | `expo-image-picker` plugin |
 | Splash screen | Logo on `#FAF8F5` | `expo-splash-screen` plugin |
 | In-app updates | Android only; does nothing on iOS (Apple has no equivalent) | `src/services/inAppUpdates.ts` |
@@ -155,8 +148,8 @@ Fill these in on the version page (**App Store** tab → **1.8.0 Prepare for Sub
 
 | Field | Limit | Suggested |
 |---|---|---|
-| Subtitle | 30 chars | `Read, listen & chant daily` |
-| Promotional text | 170 chars | `Read Hanuman Chalisa in 13 Indian languages, listen to the path, count your jaap and keep a sankalp. Simple, private, ad-free.` |
+| Subtitle | 30 chars | `Read, chant & keep sankalp` |
+| Promotional text | 170 chars | `Read Hanuman Chalisa in 13 Indian languages, count your jaap and keep a sankalp. Simple, private, ad-free.` |
 | Keywords | 100 chars, comma-separated, no spaces | `hanuman,chalisa,bajrang,baan,aarti,jaap,mantra,ram,sundarkand,bhakti,hindu,prayer,path,stotra` |
 | Support URL | required | e.g. `https://hanumanchalisa.club/contact` |
 | Marketing URL | optional | `https://hanumanchalisa.club` |
@@ -171,9 +164,6 @@ READ IN YOUR LANGUAGE
 • Complete Hanuman Chalisa with doha and all 40 chaupais
 • 13 languages: Hindi, English, Marathi, Nepali, Bengali, Assamese, Gujarati, Punjabi, Odia, Tamil, Telugu, Kannada and Malayalam
 • Adjustable text size and a reading progress bar
-
-LISTEN
-• Play the Chalisa path, even in the background
 
 JAAP & SANKALP
 • Tap-to-count jaap with Ram, Om, Hanuman and more, with round goals of 11 to 1008
@@ -246,7 +236,6 @@ Check these on a real iPhone before submitting:
 - [ ] Splash shows the logo centred, then the Home screen (no second logo)
 - [ ] Chalisa: switch languages (try Tamil and Malayalam), change text size, scroll to the end
 - [ ] Language page slides up and doesn't cover the tab bar
-- [ ] Audio plays and keeps playing with the screen locked
 - [ ] Jaap: counting, vibration on round complete, reset asks for confirmation
 - [ ] Sankalp: start, mark a day, reset
 - [ ] My Notes: add several photos, save, open the gallery, use full-screen swipe and pinch-zoom; the photo permission dialog shows the right text
@@ -269,10 +258,8 @@ Check these on a real iPhone before submitting:
      ```
      No login required. All features work offline and data stays on the device.
      Main features: Hanuman Chalisa in 13 Indian languages (Chalisa tab → language button),
-     audio recitation (Home → Listen card), jaap counter (Jaap tab), 11/21/40-day sankalp
-     tracker, spiritual library, and private notes with full-screen mantra photos
-     (More → My Notes). Background audio is used only to keep the Chalisa recitation
-     playing when the screen is locked.
+     jaap counter (Jaap tab), 11/21/40-day sankalp tracker, spiritual library, and
+     private notes with full-screen mantra photos (More → My Notes).
      ```
 3. **Version release:** choose *Manually release this version* for the first release, so you control the launch day.
 4. Click **Add for Review** → **Submit to App Review**.
@@ -284,8 +271,7 @@ Review time varies. Watch the status and messages in App Store Connect rather th
 | Guideline | Risk | What to do |
 |---|---|---|
 | **4.3 Spam** | There are many Chalisa apps | Point to what's different in the review notes and screenshots: 13 languages, jaap, sankalp, mantra photo notes |
-| **5.2 Intellectual property** | The audio recording (section 0) and any third-party artwork | Use only content you own or have a licence for |
-| **2.5.4 Background modes** | Audio background mode must be used for real audio | Already justified by the recitation; mention it in the notes |
+| **5.2 Intellectual property** | Any third-party text, images or artwork | Use only content you own or have a licence for |
 | **5.1.1 Privacy** | Missing or broken privacy policy URL | Make sure the URL loads |
 | **2.1 Performance** | Crashes or empty screens during review | Run through the TestFlight checklist |
 | **4.2 Minimum functionality** | App looks like a website wrapper | The Mandirpedia/Rashifal web views are extras, not the core; keep them that way |
@@ -316,7 +302,6 @@ Never commit an App Store Connect API private key (`.p8`), Apple password, or EA
 - [Apple: Upload builds](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds)
 - [Expo: App version management](https://docs.expo.dev/build-reference/app-versions/)
 - [Expo: EAS Build infrastructure](https://docs.expo.dev/build-reference/infrastructure/)
-- [Expo Audio configuration](https://docs.expo.dev/versions/latest/sdk/audio/)
 
 If you're rejected, reply in **Resolution Center**. Small fixes are often accepted with just an explanation; otherwise make a new build and submit again.
 

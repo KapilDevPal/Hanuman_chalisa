@@ -18,9 +18,9 @@ export interface HelpTopic {
 }
 
 export const HELP_INTRO: Record<Lang, string> = {
-    en: 'This app helps you build a daily practice of devotion to Shri Hanuman: read and listen to the Chalisa in your own language, count your jaap, keep a sankalp, and save the mantras that matter to you. Everything stays on your phone.',
-    hi: 'यह ऐप श्री हनुमान जी की दैनिक भक्ति में आपकी मदद करता है: अपनी भाषा में चालीसा पढ़ें और सुनें, जाप गिनें, संकल्प लें और अपने प्रिय मंत्र सहेजें। सब कुछ आपके फ़ोन पर ही रहता है।',
-    pa: 'ਇਹ ਐਪ ਸ਼੍ਰੀ ਹਨੁਮਾਨ ਜੀ ਦੀ ਰੋਜ਼ਾਨਾ ਭਗਤੀ ਵਿੱਚ ਤੁਹਾਡੀ ਮਦਦ ਕਰਦਾ ਹੈ: ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ ਚਾਲੀਸਾ ਪੜ੍ਹੋ ਅਤੇ ਸੁਣੋ, ਜਾਪ ਗਿਣੋ, ਸੰਕਲਪ ਲਓ ਅਤੇ ਆਪਣੇ ਮੰਤਰ ਸੰਭਾਲੋ। ਸਭ ਕੁਝ ਤੁਹਾਡੇ ਫ਼ੋਨ ਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ।',
+    en: 'This app helps you build a daily practice of devotion to Shri Hanuman: read the Chalisa in your own language, count your jaap, keep a sankalp, and save the mantras that matter to you. Everything stays on your phone.',
+    hi: 'यह ऐप श्री हनुमान जी की दैनिक भक्ति में आपकी मदद करता है: अपनी भाषा में चालीसा पढ़ें, जाप गिनें, संकल्प लें और अपने प्रिय मंत्र सहेजें। सब कुछ आपके फ़ोन पर ही रहता है।',
+    pa: 'ਇਹ ਐਪ ਸ਼੍ਰੀ ਹਨੁਮਾਨ ਜੀ ਦੀ ਰੋਜ਼ਾਨਾ ਭਗਤੀ ਵਿੱਚ ਤੁਹਾਡੀ ਮਦਦ ਕਰਦਾ ਹੈ: ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ ਚਾਲੀਸਾ ਪੜ੍ਹੋ, ਜਾਪ ਗਿਣੋ, ਸੰਕਲਪ ਲਓ ਅਤੇ ਆਪਣੇ ਮੰਤਰ ਸੰਭਾਲੋ। ਸਭ ਕੁਝ ਤੁਹਾਡੇ ਫ਼ੋਨ ਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ।',
 };
 
 export const HELP_TOPICS: HelpTopic[] = [
@@ -57,40 +57,6 @@ export const HELP_TOPICS: HelpTopic[] = [
                     'ਭਾਸ਼ਾ ਬਟਨ ਦਬਾ ਕੇ 13 ਭਾਸ਼ਾਵਾਂ ਵਿੱਚੋਂ ਚੁਣੋ। ਤੁਹਾਡੀ ਚੋਣ ਯਾਦ ਰੱਖੀ ਜਾਂਦੀ ਹੈ।',
                     '− ਅਤੇ + ਨਾਲ ਅੱਖਰ ਛੋਟੇ ਜਾਂ ਵੱਡੇ ਕਰੋ।',
                     'ਉੱਪਰਲੀ ਪਤਲੀ ਪੱਟੀ ਦੱਸਦੀ ਹੈ ਕਿ ਤੁਸੀਂ ਕਿੰਨਾ ਪੜ੍ਹ ਲਿਆ ਹੈ।',
-                ],
-            },
-        },
-    },
-    {
-        id: 'audio',
-        icon: 'headset-outline',
-        route: ['Home', { screen: 'Audio' }],
-        text: {
-            en: {
-                title: 'Listen to the Chalisa',
-                why: 'Listening while you read helps you learn the tune and rhythm, and lets you take part even while travelling or resting.',
-                how: [
-                    'On Home, tap the large "Listen Now" card.',
-                    'Use play / pause and the skip buttons to move through the recitation.',
-                    'Tap the arrow at the top to close the player; playback keeps going.',
-                ],
-            },
-            hi: {
-                title: 'चालीसा सुनें',
-                why: 'पढ़ते समय सुनने से लय और धुन सीखने में मदद मिलती है, और यात्रा या आराम करते समय भी आप पाठ से जुड़ सकते हैं।',
-                how: [
-                    'होम पर बड़े "सुनें" कार्ड को दबाएँ।',
-                    'चलाएँ / रोकें और आगे-पीछे के बटन से पाठ में आगे बढ़ें।',
-                    'प्लेयर बंद करने के लिए ऊपर का तीर दबाएँ; ऑडियो चलता रहेगा।',
-                ],
-            },
-            pa: {
-                title: 'ਚਾਲੀਸਾ ਸੁਣੋ',
-                why: 'ਪੜ੍ਹਦੇ ਸਮੇਂ ਸੁਣਨ ਨਾਲ ਲੈਅ ਅਤੇ ਧੁਨ ਸਿੱਖਣ ਵਿੱਚ ਮਦਦ ਮਿਲਦੀ ਹੈ, ਅਤੇ ਸਫ਼ਰ ਜਾਂ ਆਰਾਮ ਵੇਲੇ ਵੀ ਤੁਸੀਂ ਪਾਠ ਨਾਲ ਜੁੜ ਸਕਦੇ ਹੋ।',
-                how: [
-                    'ਹੋਮ ਤੇ ਵੱਡੇ "ਹੁਣ ਸੁਣੋ" ਕਾਰਡ ਨੂੰ ਦਬਾਓ।',
-                    'ਚਲਾਓ / ਰੋਕੋ ਅਤੇ ਅੱਗੇ-ਪਿੱਛੇ ਬਟਨਾਂ ਨਾਲ ਪਾਠ ਵਿੱਚ ਅੱਗੇ ਵਧੋ।',
-                    'ਪਲੇਅਰ ਬੰਦ ਕਰਨ ਲਈ ਉੱਪਰਲਾ ਤੀਰ ਦਬਾਓ; ਆਡੀਓ ਚੱਲਦਾ ਰਹੇਗਾ।',
                 ],
             },
         },

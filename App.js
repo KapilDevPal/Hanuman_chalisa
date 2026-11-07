@@ -6,7 +6,6 @@ import { Notifications } from './src/utils/notificationsCompat';
 import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import { UserProvider } from './src/context/UserContext';
-import { AudioProvider, useAudio } from './src/context/AudioContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { scheduleDailyReminder } from './src/utils/notifications';
 import { useInAppUpdates } from './src/hooks/useInAppUpdates';
@@ -23,7 +22,6 @@ function ThemedStatusBar() {
 
 // ─── App Content ──────────────────────────────────────────────────────────────
 function AppContent() {
-  const { playAudio, pauseAudio } = useAudio();
   const { isLoading: themeLoading } = useTheme();
   const { isLoading: languageLoading } = useLanguage();
   const ready = !themeLoading && !languageLoading;
@@ -34,19 +32,6 @@ function AppContent() {
 
   // Google Play flexible update check (Android release builds only; no-op in Expo Go)
   useInAppUpdates(ready);
-
-  useEffect(() => {
-    if (!Notifications) return;
-    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
-      const actionIdentifier = response.actionIdentifier;
-      if (actionIdentifier === 'PAUSE_ACTION') {
-        pauseAudio();
-      } else if (actionIdentifier === 'PLAY_ACTION') {
-        playAudio();
-      }
-    });
-    return () => { subscription?.remove(); };
-  }, [playAudio, pauseAudio]);
 
   if (!ready) return null;
   return <AppNavigator />;
@@ -62,10 +47,8 @@ export default function App() {
     <ThemeProvider>
       <LanguageProvider>
         <UserProvider>
-          <AudioProvider>
-            <ThemedStatusBar />
-            <AppContent />
-          </AudioProvider>
+          <ThemedStatusBar />
+          <AppContent />
         </UserProvider>
       </LanguageProvider>
     </ThemeProvider>

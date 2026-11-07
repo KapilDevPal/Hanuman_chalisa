@@ -25,7 +25,7 @@ If the user enables a reminder, the app requests notification permission and sch
 
 ## Audio
 
-The app plays a bundled devotional recording and supports background playback. It does not record audio and does not request microphone access.
+The app does not play or record audio and does not request microphone access.
 
 ## External websites
 

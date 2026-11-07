@@ -16,7 +16,6 @@ import { WisdomScreen } from '../screens/WisdomScreen';
 import { PrayerGuideScreen } from '../screens/PrayerGuideScreen';
 import { LibraryScreen } from '../screens/LibraryScreen';
 import { ReaderScreen } from '../screens/ReaderScreen';
-import { AudioScreen } from '../screens/AudioScreen';
 import { MoreScreen } from '../screens/MoreScreen';
 import { WebViewScreen } from '../screens/WebViewScreen';
 import { NotesScreen } from '../screens/NotesScreen';
@@ -57,26 +56,6 @@ const HomeStack = () => {
             <Stack.Screen name="PrayerGuide" component={PrayerGuideScreen} options={{ title: T('header_prayer') }} />
             <Stack.Screen name="Library" component={LibraryScreen} options={{ title: T('header_library') }} />
             <Stack.Screen name="Reader" component={ReaderScreen} options={({ route }: any) => ({ title: route.params?.title || T('header_library') })} />
-            <Stack.Screen
-                name="Audio"
-                component={AudioScreen}
-                options={{
-                    title: '',
-                    headerTransparent: true,
-                    headerLeft: (props) => (
-                        <TouchableOpacity
-                            onPress={props.onPress}
-                            accessibilityLabel="Close player"
-                            style={{
-                                marginLeft: 16, width: 40, height: 40, borderRadius: 20,
-                                backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center',
-                            }}
-                        >
-                            <Ionicons name="chevron-down" size={22} color={colors.text} />
-                        </TouchableOpacity>
-                    ),
-                }}
-            />
         </Stack.Navigator>
     );
 };

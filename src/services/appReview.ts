@@ -16,7 +16,7 @@ import * as StoreReview from 'expo-store-review';
 import { isReviewPromptDue, setLastReviewPromptAt } from '../utils/reviewStorage';
 
 // TODO: replace with the real App Store ID (numbers only) once the iOS app is published.
-const IOS_APP_STORE_ID = 'YOUR_APP_STORE_ID';
+const IOS_APP_STORE_ID = '6826591481';
 const ANDROID_PACKAGE = 'com.kapildevpal.hanuman_chalisa';
 
 const STORE_URLS = Platform.select({
@@ -30,8 +30,7 @@ const STORE_URLS = Platform.select({
     },
 });
 
-const hasStoreListing = () =>
-    !!STORE_URLS && !(Platform.OS === 'ios' && IOS_APP_STORE_ID === 'YOUR_APP_STORE_ID');
+const hasStoreListing = () => !!STORE_URLS;
 
 /** Text for the fallback dialog, so callers can pass translated strings. */
 export interface ReviewFallbackCopy {

@@ -2,6 +2,7 @@
   "expo": {
     "name": "Hanuman Chalisa",
     "slug": "hanuman_chalisa",
+    "owner": "akcatalyst",
     "version": "1.8.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,11 +31,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "814f7e8b-37e3-4e16-9048-ac3fb6606293"
-      }
     },
     "plugins": [
       "expo-build-properties",
@@ -66,6 +62,11 @@
           "backgroundColor": "#FAF8F5"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "33a2eed3-d86a-493c-9e64-34daa990bef3"
+      }
+    }
   }
 }

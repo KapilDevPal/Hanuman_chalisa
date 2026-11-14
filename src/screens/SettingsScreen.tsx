@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput } from 'react-native';
 import Constants from 'expo-constants';
 import * as Application from 'expo-application';
@@ -11,6 +11,7 @@ import { useInAppReview } from '../hooks/useInAppReview';
 import { useInAppUpdates } from '../hooks/useInAppUpdates';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { APP_LANGUAGES } from '../components/LanguageSwitcher';
+import { privacyOptionsRequired, showPrivacyOptions } from '../ads/initAds';
 import { Screen, Surface, SectionLabel, ListRow, IconTile, LangBadge } from '../components/ui';
 
 export const SettingsScreen = () => {
@@ -18,6 +19,8 @@ export const SettingsScreen = () => {
     const { colors, isDark } = useTheme();
     const { jaapName, setJaapName } = useUser();
     const { T } = useT();
+    const [showAdPrivacy, setShowAdPrivacy] = useState(false);
+    useEffect(() => { privacyOptionsRequired().then(setShowAdPrivacy); }, []);
     const { openStoreListing } = useInAppReview();
     const { isSupported: updatesSupported, checkForUpdates } = useInAppUpdates();
     // Native values first: EAS manages the build number remotely, so app.json can be stale
@@ -76,6 +79,21 @@ export const SettingsScreen = () => {
                     );
                 })}
             </Surface>
+
+            {showAdPrivacy && (
+                <>
+                    <SectionLabel>Ads</SectionLabel>
+                    <Surface padded={false} style={{ marginBottom: 24 }}>
+                        <ListRow
+                            icon={<IconTile><Ionicons name="shield-checkmark-outline" size={20} color={colors.primary} /></IconTile>}
+                            title="Ad privacy choices"
+                            subtitle="Review or change your consent for ads"
+                            onPress={showPrivacyOptions}
+                            last
+                        />
+                    </Surface>
+                </>
+            )}
 
             {/* About */}
             <SectionLabel>{T('settings_about')}</SectionLabel>

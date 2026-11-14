@@ -5,6 +5,7 @@ import {
 } from 'react-native-google-mobile-ads';
 import { useTheme } from '../context/ThemeContext';
 import { RADIUS } from './ui';
+import { useAdsReady } from '../ads/initAds';
 import { ADS_ENABLED, NATIVE_AD_UNIT_ID } from '../ads/config';
 
 /**
@@ -14,7 +15,7 @@ import { ADS_ENABLED, NATIVE_AD_UNIT_ID } from '../ads/config';
  */
 const LoadedAd = () => {
     const { colors } = useTheme();
-    const { status, nativeAd } = useNativeAd({ adUnitId: NATIVE_AD_UNIT_ID });
+    const { status, nativeAd } = useNativeAd({ adUnitId: NATIVE_AD_UNIT_ID, autoLoad: useAdsReady() });
 
     if (status !== 'loaded' || !nativeAd) return null;
 

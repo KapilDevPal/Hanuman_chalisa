@@ -6,7 +6,11 @@ import { useTheme } from '../context/ThemeContext';
 const sections = [
     {
         title: 'Data collection',
-        body: 'Hanuman Chalisa does not require an account and does not include advertising or analytics SDKs. The app developer does not collect, sell, or share your personal data through the native app.',
+        body: 'Hanuman Chalisa does not require an account and the developer does not collect your personal data. The app shows ads provided by Google AdMob, which may collect device identifiers, IP address and ad interaction data to serve and measure ads. See policies.google.com/technologies/partner-sites for details.',
+    },
+    {
+        title: 'Advertising',
+        body: 'Hanuman Chalisa displays native ads served by Google AdMob. Ads are clearly labelled “Ad”. AdMob may use device identifiers or cookies to show and measure ads. You can limit ad personalisation in your device settings (Settings > Privacy > Apple Advertising on iOS, or Settings > Google > Ads on Android).',
     },
     {
         title: 'Information stored on your device',

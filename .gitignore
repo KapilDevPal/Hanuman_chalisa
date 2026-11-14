@@ -39,3 +39,14 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Secrets (never commit)
+.secrets/
+credentials.json
+*.keystore
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+keystore.properties
+.env*

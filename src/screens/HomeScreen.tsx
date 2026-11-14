@@ -12,6 +12,7 @@ import { Screen, Surface, SectionLabel, ListRow, IconTile, IconButton, Button, R
 import { DiyaIcon, OmBadge } from '../components/icons';
 import { CHALISA_LANGUAGES } from '../data/chalisaLanguages';
 import { textLibrary } from '../data/TextLibrary';
+import { NativeAdCard } from '../components/NativeAdCard';
 import { openInstagramProfile, shareOnWhatsApp } from '../utils/share';
 
 // Wisdom Data
@@ -184,6 +185,8 @@ export const HomeScreen = () => {
                     <Text style={{ fontSize: 14, fontWeight: '700', color: colors.primary, marginTop: 12 }}>{T('home_read_full')}</Text>
                 </Surface>
             </TouchableOpacity>
+
+            <NativeAdCard />
 
             {/* ── Library ──────────────────────────────────────────────────── */}
             <SectionLabel

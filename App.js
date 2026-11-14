@@ -8,6 +8,7 @@ import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import { UserProvider } from './src/context/UserContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { scheduleDailyReminder } from './src/utils/notifications';
+import { initAds } from './src/ads/initAds';
 import { useInAppUpdates } from './src/hooks/useInAppUpdates';
 
 // Keep the native splash (logo on app background) up until saved theme/language are loaded,
@@ -41,6 +42,7 @@ function AppContent() {
 export default function App() {
   useEffect(() => {
     scheduleDailyReminder();
+    initAds();
   }, []);
 
   return (

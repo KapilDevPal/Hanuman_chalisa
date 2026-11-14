@@ -3,7 +3,7 @@
     "name": "Hanuman Chalisa",
     "slug": "hanuman_chalisa",
     "owner": "akcatalyst",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,7 +27,7 @@
         "backgroundColor": "#FF9933"
       },
       "package": "com.kapildevpal.hanuman_chalisa",
-      "versionCode": 18
+      "versionCode": 19
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -51,6 +51,16 @@
           "imageWidth": 180,
           "resizeMode": "contain",
           "backgroundColor": "#FAF8F5"
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8048322787870165~3018501766",
+          "iosAppId": "ca-app-pub-8048322787870165~6851458076",
+          "skAdNetworkItems": [
+            "cstr6suwn9.skadnetwork"
+          ]
         }
       ]
     ],

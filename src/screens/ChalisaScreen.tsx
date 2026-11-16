@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +11,7 @@ import { useInAppReview } from '../hooks/useInAppReview';
 import { getChalisaLanguage } from '../data/chalisaLanguages';
 import { scrollProgress, MIN_FONT, MAX_FONT } from '../utils/reading';
 import { LangBadge, GUTTER } from '../components/ui';
+import { BannerAdBar } from '../components/BannerAdBar';
 
 const CONTENT_LANG_KEY = 'chalisa_content_lang';
 
@@ -43,6 +44,15 @@ export const ChalisaScreen = () => {
             .then(stored => { if (stored) setContentLang(stored); })
             .catch(() => { });
     }, []);
+
+    // Re-read the reading language on focus (it can be changed from the Home language switcher)
+    useFocusEffect(
+        React.useCallback(() => {
+            AsyncStorage.getItem(CONTENT_LANG_KEY)
+                .then(stored => { if (stored) setContentLang(stored); })
+                .catch(() => { });
+        }, [])
+    );
 
     // When global language changes (user goes to Settings and picks a language),
     // sync the content language too.
@@ -218,6 +228,8 @@ export const ChalisaScreen = () => {
                 </View>
             </ScrollView>
 
+            {/* Banner sits directly above the bottom tab bar */}
+            <BannerAdBar />
         </View>
     );
 };

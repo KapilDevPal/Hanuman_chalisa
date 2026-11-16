@@ -175,6 +175,8 @@ export const HomeScreen = () => {
                 />
             </View>
 
+            <NativeAdCard />
+
             {/* ── Daily wisdom ─────────────────────────────────────────────── */}
             <SectionLabel>{T('home_daily_wisdom')}</SectionLabel>
             <TouchableOpacity onPress={() => navigation.navigate('Wisdom')} activeOpacity={0.8} style={{ marginBottom: 28 }}>
@@ -185,8 +187,6 @@ export const HomeScreen = () => {
                     <Text style={{ fontSize: 14, fontWeight: '700', color: colors.primary, marginTop: 12 }}>{T('home_read_full')}</Text>
                 </Surface>
             </TouchableOpacity>
-
-            <NativeAdCard />
 
             {/* ── Library ──────────────────────────────────────────────────── */}
             <SectionLabel

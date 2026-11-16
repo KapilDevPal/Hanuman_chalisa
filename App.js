@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
+import { InteractionManager } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { Notifications } from './src/utils/notificationsCompat';
@@ -40,9 +41,16 @@ function AppContent() {
 
 // ─── Root App ─────────────────────────────────────────────────────────────────
 export default function App() {
+  // Defer non-essential startup work until the first screen is interactive, so the
+  // AdMob SDK init and notification scheduling never block the main thread at launch (ANR).
   useEffect(() => {
-    scheduleDailyReminder();
-    initAds();
+    const task = InteractionManager.runAfterInteractions(() => {
+      setTimeout(() => {
+        scheduleDailyReminder();
+        initAds();
+      }, 3000);
+    });
+    return () => task.cancel();
   }, []);
 
   return (

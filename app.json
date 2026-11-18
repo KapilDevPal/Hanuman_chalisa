@@ -3,7 +3,7 @@
     "name": "Hanuman Chalisa",
     "slug": "hanuman_chalisa",
     "owner": "akcatalyst",
-    "version": "1.9.3",
+    "version": "1.9.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,12 +27,13 @@
         "backgroundColor": "#FF9933"
       },
       "package": "com.kapildevpal.hanuman_chalisa",
-      "versionCode": 22
+      "versionCode": 23
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "./plugins/withOptionalPortrait",
       [
         "expo-build-properties",
         {

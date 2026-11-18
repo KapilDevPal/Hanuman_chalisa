@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { Alert } from 'react-native';
+import { Alert, AppState } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { inAppUpdates } from '../services/inAppUpdates';
 import { useT } from './useT';
 
@@ -9,6 +10,9 @@ type Translate = ReturnType<typeof useT>['T'];
 let checkedThisSession = false;
 // One flow at a time: a download started at launch shouldn't be restarted from Settings.
 let flowInProgress = false;
+// Set when a download finished while the app was backgrounded (an Alert can't show then).
+// Persisted so it also survives the process being killed before the user returns.
+const PENDING_RESTART_KEY = 'inapp_update_pending_restart';
 
 /**
  * "Update Now / Later" → background download → "Restart Now / Later".
@@ -31,6 +35,12 @@ async function runFlexibleUpdateFlow(getT: () => Translate, manual: boolean): Pr
     const promptRestart = () => {
         if (restartPrompted) return;
         restartPrompted = true;
+        if (AppState.currentState !== 'active') {
+            // Downloaded in the background: prompt when the user comes back.
+            AsyncStorage.setItem(PENDING_RESTART_KEY, '1').catch(() => { });
+            finish();
+            return;
+        }
         const t = getT();
         Alert.alert(t('update_ready_title'), t('update_ready_message'), [
             { text: t('update_later'), style: 'cancel', onPress: finish },
@@ -74,6 +84,30 @@ async function runFlexibleUpdateFlow(getT: () => Translate, manual: boolean): Pr
 }
 
 /**
+ * Shows "Restart now?" if an update finished downloading while the app was in the background.
+ * Resolves true when it handled (or showed) the prompt, so callers can skip a fresh update check.
+ */
+async function promptPendingRestart(getT: () => Translate): Promise<boolean> {
+    if (flowInProgress || AppState.currentState !== 'active') return false;
+    const pending = await AsyncStorage.getItem(PENDING_RESTART_KEY).catch(() => null);
+    if (!pending) return false;
+    // The flag is stale if the update was already installed or abandoned.
+    if (!(await inAppUpdates.isUpdateInProgress())) {
+        AsyncStorage.removeItem(PENDING_RESTART_KEY).catch(() => { });
+        return false;
+    }
+    if (flowInProgress) return true;
+    flowInProgress = true;
+    AsyncStorage.removeItem(PENDING_RESTART_KEY).catch(() => { });
+    const t = getT();
+    Alert.alert(t('update_ready_title'), t('update_ready_message'), [
+        { text: t('update_later'), style: 'cancel', onPress: () => { flowInProgress = false; } },
+        { text: t('update_restart'), onPress: () => { flowInProgress = false; inAppUpdates.completeUpdate(); } },
+    ], { cancelable: false });
+    return true;
+}
+
+/**
  * Google Play flexible in-app updates (Android builds from Play; no-op in Expo Go / iOS).
  *
  * In the root component, `useInAppUpdates(ready)` checks once per session after the
@@ -89,7 +123,18 @@ export function useInAppUpdates(checkOnLaunch: boolean = false) {
     useEffect(() => {
         if (!checkOnLaunch || checkedThisSession || !inAppUpdates.isSupported()) return;
         checkedThisSession = true;
-        runFlexibleUpdateFlow(() => tRef.current, false);
+        promptPendingRestart(() => tRef.current).then(handled => {
+            if (!handled) runFlexibleUpdateFlow(() => tRef.current, false);
+        });
+    }, [checkOnLaunch]);
+
+    // Resume check: a download that finished while backgrounded prompts for restart on return.
+    useEffect(() => {
+        if (!checkOnLaunch || !inAppUpdates.isSupported()) return;
+        const sub = AppState.addEventListener('change', state => {
+            if (state === 'active') promptPendingRestart(() => tRef.current);
+        });
+        return () => sub.remove();
     }, [checkOnLaunch]);
 
     const checkForUpdates = useCallback(() => runFlexibleUpdateFlow(() => tRef.current, true), []);

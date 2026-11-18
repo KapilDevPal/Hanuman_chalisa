@@ -17,6 +17,7 @@ import type { AndroidNeedsUpdateResponse, StatusUpdateEvent } from 'sp-react-nat
 // Play Core constants (stable public values). Declared here so the module itself
 // isn't imported eagerly, which would throw where the native side is missing.
 const UPDATE_TYPE_FLEXIBLE = 0;
+const UPDATE_AVAILABILITY_DEVELOPER_TRIGGERED = 3;
 const INSTALL_STATUS = {
     PENDING: 1,
     DOWNLOADING: 2,
@@ -85,6 +86,21 @@ export const inAppUpdates = {
             return result.shouldUpdate && result.other?.isFlexibleUpdateAllowed === true;
         } catch (error) {
             console.warn('[InAppUpdates] Update check failed', error);
+            return false;
+        }
+    },
+
+    /**
+     * True when a flexible update was already started by this app (downloading or downloaded).
+     * Play reports this as DEVELOPER_TRIGGERED (3) in `updateAvailability`.
+     */
+    async isUpdateInProgress(): Promise<boolean> {
+        const c = getClient();
+        if (!c) return false;
+        try {
+            const result = (await c.checkNeedsUpdate({ curVersion: getInstalledVersionCode() })) as AndroidNeedsUpdateResponse;
+            return result.other?.updateAvailability === UPDATE_AVAILABILITY_DEVELOPER_TRIGGERED;
+        } catch {
             return false;
         }
     },
